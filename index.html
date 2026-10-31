@@ -165,8 +165,9 @@ body.pf *{animation:none!important;transition:none!important}
 .gw-body{flex:1;overflow-y:auto;padding:16px 16px 40px;-webkit-overflow-scrolling:touch}
 .sync-dot{width:9px;height:9px;border-radius:50%;background:#c9c1c4;display:inline-block;margin-right:2px;transition:background .3s}
 /* 升级版提示条 */
-.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-14px);z-index:400;max-width:82vw;background:rgba(255,255,255,.94);color:var(--ink);font-size:13px;font-weight:700;padding:13px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 38px rgba(0,0,0,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;text-align:center;line-height:1.5}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-10px);z-index:400;max-width:82vw;background:#fff;color:var(--ink);font-size:13px;font-weight:700;padding:12px 18px;border-radius:16px;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 28px rgba(0,0,0,.16);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease,visibility .22s;text-align:center;line-height:1.5}
+.toast.show{visibility:visible;opacity:1;transform:translate(-50%,0)}
+[data-theme="dark"] .toast{background:#2f2f3c;color:#eee;border-color:rgba(255,255,255,.1)}
 [data-theme="dark"] .toast{background:rgba(44,44,58,.95);color:#eee;border-color:rgba(255,255,255,.12)}
 
 </style><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="白榆"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="data:image/png;base64,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">
@@ -175,7 +176,7 @@ body.pf *{animation:none!important;transition:none!important}
 <audio id="bgm" loop></audio><button class="mubtn" id="muBtn" onclick="toggleMusic()">🎵</button><div class="toast" id="toast"></div>
 <input type="file" id="photoInput" accept="image/*" multiple style="display:none">
 <div id="app">
-<div class="topbar"><h2>🌿 白榆</h2><div class="acts"><span class="sync-dot" id="syncDot"></span><select class="theme-sel" id="themeSel" onchange="setTheme(this.value)"><option value="pink">🌸</option><option value="blue">🌊</option><option value="green">🍃</option><option value="dark">🌙</option><option value="morandi">🍂</option></select><button class="top-ic" onclick="nav('photos')">📸</button></div></div>
+<div class="topbar"><h2>🌿 白榆</h2><div class="acts"><span class="sync-dot" id="syncDot"></span><span id="verTag" onclick="showVer()" style="font-size:10px;font-weight:800;color:var(--mu);padding:3px 7px;border-radius:9px;background:var(--ac);cursor:pointer;margin-right:2px">v2</span><select class="theme-sel" id="themeSel" onchange="setTheme(this.value)"><option value="pink">🌸</option><option value="blue">🌊</option><option value="green">🍃</option><option value="dark">🌙</option><option value="morandi">🍂</option></select><button class="top-ic" onclick="nav('photos')">📸</button></div></div>
 
 <!-- 首页 -->
 <section class="view on" id="v-home">
@@ -257,7 +258,7 @@ body.pf *{animation:none!important;transition:none!important}
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
 var CONFIG={me:{name:"方方",nickname:"方方",emoji:"🦁",city:"南京 · 江宁",hometown:"河南安阳",lat:31.9526,lon:118.8395,birthday:"2007-08-09",img:"",tags:["河南人","在南京上学","细心","行动派","守护型","一诺千金","爱打篮球"]},her:{name:"欣欣",nickname:"欣欣",emoji:"🐰",city:"达州 · 渠县",hometown:"达州 · 渠县",lat:30.8365,lon:106.9743,birthday:"2009-04-14",img:"",tags:["川妹子","可爱","小吃货","嘴硬心软","快乐源泉","有主见","我的乖乖"]},startDate:"2026-02-11",meetDate:"2021-05-23",milestones:[100,200,365,520,999,1314],timeline:[{date:"2021-05-23",title:"我们认识了",text:"在人群里遇见你，故事悄悄开始。"},{date:"2026-02-11",title:"我们在一起了",text:"终于牵到你的手，往后的每一天都是你。"}],future:[{icon:"🌉",title:"结束异地",text:"总有一天要在同一个城市醒来。"},{icon:"🍲",title:"一起去成都",text:"吃遍成都，也看看她长大的地方。"},{icon:"🎓",title:"一起毕业长大",text:"每个重要节点都一起走。"},{icon:"👨‍👩‍👧",title:"见彼此家人",text:"安阳和渠县的爸妈，要看到我们幸福的样子。"},{icon:"🌊",title:"去看海",text:"看一次海，看一次日出，拍很多合照。"},{icon:"❤️",title:"一直在一起",text:"不管距离多远，白榆里永远有我们。"}],quotes:["你是我平淡生活里最浪漫的惊喜。","遇见你之后，我的每一天都有了方向。","世界很大，而我心里只装得下一个你。","想把所有温柔都攒起来送给你。","和你在一起，连发呆都变得有趣。","希望我们一直在一起，慢慢变老。"],spin:["吃火锅","喝奶茶","看电影","散步","吃蛋糕","宅家"],dailyQ:["今天最想对方的一刻？","如果现在能见面，最想做什么？","今天没说出口的话？","最想一起做的小事？","偷偷夸TA的一件事？","给未来的我们留一句话。"],topMoment:""};
-var MUSIC_URL="https://music.163.com/song/media/outer/url?id=5238992.mp3";
+var MUSIC_URL="bgm.wav";
 var MQTT_URL="wss://broker.emqx.io:8084/mqtt",ROOM="baiyu/room211";
 /* ================= 存储 ================= */
 function ls(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
@@ -302,6 +303,28 @@ function toggleMusic(){
   }else{ a.pause() }
 }
 /* ================= 主题 ================= */
+function showVer(){
+  var box=document.getElementById("verPop");
+  if(!box){
+    box=document.createElement("div");
+    box.id="verPop";
+    box.style.cssText="position:fixed;inset:0;z-index:430;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:22px";
+    box.onclick=function(){box.remove()};
+    var inner=document.createElement("div");
+    inner.style.cssText="background:var(--c2);border-radius:22px;padding:22px;max-width:340px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.28)";
+    inner.innerHTML="<h3 style='color:var(--p);text-align:center;margin-bottom:14px;font-size:17px'>白榆 v2 更新了什么</h3>"+
+      "<div style='font-size:13px;line-height:2;color:var(--ink)'>"+
+      "🎵 音乐重做：同源音频，点一下就能响<br>"+
+      "⚡ 首屏提速：去掉外部 CDN，打开即现<br>"+
+      "🔄 同步修复：顶栏圆点变绿即已连通<br>"+
+      "🎮 游戏改版：6 个图标，点开独立窗口<br>"+
+      "💬 提示改版：轻量卡片，不再挡屏<br>"+
+      "<span style='color:var(--mu);font-size:11px'>点任意处关闭</span></div>";
+    inner.onclick=function(e){e.stopPropagation()};
+    box.appendChild(inner);
+    document.body.appendChild(box);
+  }
+}
 function setTheme(t){document.body.setAttribute("data-theme",t);US.theme=t;svUS()}
 /* ================= 计时 ================= */
 function startTimeSet(){var el=$("loveTimer");if(!el)return;function tick(){var d=Date.now()-pD(CONFIG.startDate).getTime(),p=Math.abs(d),dd=Math.floor(p/86400000),h=Math.floor(p%86400000/3600000),m=Math.floor(p%3600000/60000),s=Math.floor(p%60000/1000);el.textContent=d<0?"距离在一起还有 "+dd+" 天":"💞 在一起 "+dd+" 天 "+h+":"+pad(m)+":"+pad(s)}tick();setInterval(tick,1000)}
