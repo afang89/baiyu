@@ -301,7 +301,7 @@ body.inapp .mubtn{display:none}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-02-4";
+var APP_VER="2026-11-02-5";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -465,29 +465,52 @@ function renToday(){
   $("tdPokes").textContent="今天被戳 "+pokeCount()+" 次";
 }
 function pts(){var ck=ls("love_checkin_v1")||{},ms=ls("love_messages_v1")||[],em=ls("love_emotions_v1")||[],ws=ls("love_wishes_v1")||[],ch=ls("love_chats_v1")||[],fp=ls("love_footprints_v1")||[],lt=ls("love_letters_v1")||[],ph=ls("love_photos_v1")||[];return Object.keys(ck).length*20+ms.length*5+em.length*5+ws.filter(function(w){return w.done}).length*10+ch.length*3+fp.length*8+lt.length*8+ph.length*6}
-/* ===== 成就系统 ===== */
-var ACH=[],AEXP={};
-function A(ico,nm,desc,key,need,cat,lvl){ACH.push({ico:ico,nm:nm,d:desc,k:key,n:need,c:cat,l:lvl})}
-var T1=[1,2,3,5,8,10,15,20,30,40,50,60,80,100,150,200,300,500,800,1000,1500,2000];
-var CATS=[["msgs","💌","留言"],["emos","🎁","情绪"],["wishes","✅","心愿"],["wishDone","🌟","圆梦"],
- ["chats","💬","聊天"],["checkins","🔥","打卡"],["feet","🗺","足迹"],["photos","📸","照片"],
- ["daily","📝","问答"],["letters","✉️","定时信"],["points","💎","积分"],["pokes","💗","被戳"],
- ["hugs","🫂","抱抱"],["rains","❤️","爱心雨"]];
-CATS.forEach(function(c){
-  T1.forEach(function(n){A(c[1],"「"+c[2]+"」"+n,"累计「"+c[2]+"」达到 "+n+" 次时自动获得",c[0],n,c[0],"×"+n)});
-});
-[7,14,30,60,90,100,150,200,250,300,365,400,500,520,600,730,800,999,1000,1314,1500,2000,3000,3650].forEach(function(n){
-  A("📅","相伴 "+n+" 天","在一起满 "+n+" 天自动获得","days",n,"days",n+"天");
-});
-[["💌","第一封信","写下第 1 条留言","msgs",1],["🎁","情绪初体验","放进第 1 条情绪","emos",1],
- ["✅","第一个心愿","加入第 1 个心愿","wishes",1],["💬","第一次聊天","聊天墙第 1 条","chats",1],
- ["🌅","第一次打卡","说一次早安或晚安","checkins",1],["📍","第一个足迹","记录 1 个地方","feet",1],
- ["📷","第一张照片","相册上传 1 张","photos",1],["📝","第一次问答","回答 1 次每日一问","daily",1],
- ["✉️","第一封定时信","安排 1 封信","letters",1],["🎨","个性头像","换一次头像","avatar",1],
- ["🌈","换换心情","用过 2 种主题","themes",2],["🪪","认领身份","设置我是谁","who",1],
- ["🫂","第一次抱抱","连戳 3 下触发抱抱","hugs",1],["❤️","第一场爱心雨","连戳 10 下触发","rains",1],
- ["📦","备份意识","导出过 1 次备份","backup",1],["💯","百分恋人","积分达到 100","points",100]
-].forEach(function(x){A(x[0],x[1],x[2],x[3],x[4],"special","★")});
+/* ===== 成就系统（32 个精选） ===== */
+var ACH=[];
+function A(ico,nm,desc,key,need,cat){ACH.push({ico:ico,nm:nm,d:desc,k:key,n:need,c:cat})}
+var CATN={day:"🎯 纪念时刻",rec:"📖 记录足迹",fun:"💞 甜蜜互动",me:"🎨 专属小家"};
+
+/* 纪念时刻 */
+A("💗","在一起","在一起第 1 天自动获得","days",1,"day");
+A("💯","百天","在一起满 100 天","days",100,"day");
+A("🎂","两百天","在一起满 200 天","days",200,"day");
+A("🌹","一周年","在一起满 365 天","days",365,"day");
+A("💞","520","在一起满 520 天","days",520,"day");
+A("🌙","999","在一起满 999 天","days",999,"day");
+A("💍","1314","在一起满 1314 天","days",1314,"day");
+A("👑","两千天","在一起满 2000 天","days",2000,"day");
+
+/* 记录足迹 */
+A("💌","第一封信","写下第 1 条留言","msgs",1,"rec");
+A("📮","十封信","留言累计 10 条","msgs",10,"rec");
+A("📚","五十封信","留言累计 50 条","msgs",50,"rec");
+A("🎁","第一种情绪","放进第 1 条情绪","emos",1,"rec");
+A("🌈","情绪收藏家","情绪累计 20 条","emos",20,"rec");
+A("✅","第一个心愿","加入第 1 个心愿","wishes",1,"rec");
+A("🌟","说到做到","完成 1 个心愿","wishDone",1,"rec");
+A("🏆","圆梦五次","完成 5 个心愿","wishDone",5,"rec");
+A("📷","第一张照片","相册上传 1 张","photos",1,"rec");
+A("🖼","回忆满墙","相册存满 20 张","photos",20,"rec");
+A("💬","第一次聊天","聊天墙第 1 条","chats",1,"rec");
+A("🗣","聊到深夜","聊天墙累计 100 条","chats",100,"rec");
+A("📍","第一个足迹","记录 1 个地方","feet",1,"rec");
+A("🗺","走过五城","记录 5 个地方","feet",5,"rec");
+A("📝","第一问","回答 1 次每日一问","daily",1,"rec");
+A("🗓","连答七天","累计回答 7 天","daily",7,"rec");
+
+/* 甜蜜互动 */
+A("🔥","第一次打卡","说一次早安或晚安","checkins",1,"fun");
+A("⏰","坚持七天","累计打卡 7 天","checkins",7,"fun");
+A("💯","百日不落","累计打卡 100 天","checkins",100,"fun");
+A("💗","被戳","收到第 1 次戳一戳","pokes",1,"fun");
+A("🫂","抱抱","连戳 3 下触发第一次抱抱","hugs",1,"fun");
+A("❤️","爱心雨","连戳 10 下触发第一场爱心雨","rains",1,"fun");
+
+/* 专属小家 */
+A("🎨","换个头像","换一次头像或上传照片","avatar",1,"me");
+A("🌈","换换心情","用过 2 种主题","themes",2,"me");
+A("🪪","认领身份","在「我们」里设置我是谁","who",1,"me");
+A("📦","备份意识","导出过 1 次备份","backup",1,"me");
 
 var ST={};
 function loadStats(){
@@ -496,14 +519,15 @@ function loadStats(){
   var fx=ls("love_fx_v1")||{}, pk=ls("love_pokes_v1")||{}, pt=0, d;
   for(d in pk){ if(pk[d]) pt+=pk[d] }
   ST.days=Math.abs(dD(pD(CONFIG.startDate),t0()));
-  ST.msgs=ca("love_messages_v1"); ST.emos=ca("love_emotions_v1"); ST.wishes=ca("love_wishes_v1");
+  ST.msgs=ca("love_messages_v1"); ST.emos=ca("love_emotions_v1");
+  ST.wishes=ca("love_wishes_v1");
   ST.wishDone=(ls("love_wishes_v1")||[]).filter(function(w){return w.done}).length;
-  ST.chats=ca("love_chats_v1"); ST.checkins=co("love_checkin_v1"); ST.feet=ca("love_footprints_v1");
-  ST.photos=ca("love_photos_v1"); ST.daily=co("love_daily_v1"); ST.letters=ca("love_letters_v1");
-  ST.points=pts(); ST.pokes=pt; ST.hugs=fx.hug||0; ST.rains=fx.rain||0;
+  ST.chats=ca("love_chats_v1"); ST.checkins=co("love_checkin_v1");
+  ST.feet=ca("love_footprints_v1"); ST.photos=ca("love_photos_v1");
+  ST.daily=co("love_daily_v1"); ST.points=pts(); ST.pokes=pt;
+  ST.hugs=fx.hug||0; ST.rains=fx.rain||0;
   ST.avatar=(US.meImg||US.herImg||US.meEmoji||US.herEmoji)?1:0;
   ST.themes=(US.themesTried||[]).length; ST.who=US.who?1:0; ST.backup=US.backedUp?1:0;
-  if(ST.themes<1&&US.theme)ST.themes=1;
 }
 function achOn(a){ var v=ST[a.k]; return (typeof v==="number"?v:0)>=a.n }
 function unlockedCount(){ loadStats(); var c=0; ACH.forEach(function(a){ if(achOn(a))c++ }); return c }
@@ -511,39 +535,28 @@ function renAchMini(){
   var b=$("achMini"); if(!b)return;
   loadStats();
   b.style.cssText="display:grid;grid-template-columns:repeat(3,1fr);gap:10px";
-  var pick=[];
-  CATS.forEach(function(c){
-    var list=ACH.filter(function(a){return a.c===c[0]});
-    var got=list.filter(achOn);
-    pick.push(got.length?got[got.length-1]:list[0]);
-  });
-  var got2=pick.filter(achOn), rest=pick.filter(function(a){return !achOn(a)});
-  var show=got2.concat(rest).slice(0,6);
+  var got=ACH.filter(achOn), rest=ACH.filter(function(a){return !achOn(a)});
+  var show=got.slice(-3).concat(rest.slice(0,3)).slice(0,6);
   b.innerHTML=show.map(function(a){var on=achOn(a);
-    return '<div style="text-align:center;padding:10px 4px;border-radius:14px;cursor:pointer;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.45;filter:grayscale(1)')+'" onclick="nav(\'achievements\')"><div style="font-size:22px;line-height:1">'+a.ico+'</div><div style="font-size:10px;font-weight:700;color:var(--p);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(a.l||a.nm)+'</div></div>'}).join("");
+    return '<div onclick="nav(\'achievements\')" style="text-align:center;padding:11px 3px;border-radius:14px;cursor:pointer;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.4;filter:grayscale(1)')+'"><div style="font-size:22px;line-height:1">'+a.ico+'</div><div style="font-size:10px;font-weight:700;color:var(--p);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+a.nm+'</div></div>'}).join("");
 }
 function renAch(){
   loadStats();
   var got=0; ACH.forEach(function(a){if(achOn(a))got++});
-  $("achUnlocked").textContent=got+"/"+ACH.length;
-  var names={}; CATS.forEach(function(c){names[c[0]]=c[2]});
-  var order=CATS.map(function(c){return c[0]}).concat(["days","special"]);
+  $("achUnlocked").textContent=got+" / "+ACH.length;
   var h="";
-  order.forEach(function(c){
+  ["day","rec","fun","me"].forEach(function(c){
     var all=ACH.filter(function(a){return a.c===c}); if(!all.length)return;
     var g=0; all.forEach(function(a){if(achOn(a))g++});
-    var lim=AEXP[c]||12, show=all.slice(0,lim);
-    h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin:16px 4px 8px"><b style="font-size:14px;color:var(--p)">'+all[0].ico+' '+(names[c]||(c==="days"?"相伴天数":"特殊时刻"))+'</b><span style="font-size:11px;color:var(--mu)">'+g+' / '+all.length+'</span></div>';
-    h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">';
-    h+=show.map(function(a){var on=achOn(a);
-      return '<div onclick="achInfo('+ACH.indexOf(a)+')" style="text-align:center;padding:10px 2px;border-radius:14px;cursor:pointer;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.4;filter:grayscale(1)')+'"><div style="font-size:13px;font-weight:800;color:var(--p);line-height:1.2">'+(a.l||"★")+'</div></div>'}).join("");
-    if(all.length>show.length)h+='<div onclick="achMore(\''+c+'\')" style="grid-column:1/-1;text-align:center;padding:9px;border-radius:12px;background:var(--ac);color:var(--p);font-size:12px;font-weight:800;cursor:pointer">展开剩余 '+(all.length-show.length)+' 个</div>';
+    h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin:16px 4px 8px"><b style="font-size:14px;color:var(--p)">'+CATN[c]+'</b><span style="font-size:11px;color:var(--mu)">'+g+'/'+all.length+'</span></div>';
+    h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+    h+=all.map(function(a){var on=achOn(a);
+      return '<div onclick="achInfo('+ACH.indexOf(a)+')" style="text-align:center;padding:13px 6px;border-radius:16px;cursor:pointer;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.4;filter:grayscale(1)')+'"><div style="font-size:26px;line-height:1.1">'+a.ico+'</div><div style="font-size:11px;font-weight:800;color:var(--p);margin-top:6px">'+a.nm+'</div><div style="font-size:9px;color:var(--mu);margin-top:2px">'+(on?'已获得':'未获得')+'</div></div>'}).join("");
     h+='</div>';
   });
   $("achGrid").innerHTML=h;
   var fb=$("achFilterBar"); if(fb) fb.innerHTML="";
 }
-function achMore(c){ AEXP[c]=(AEXP[c]||12)+24; renAch() }
 function achInfo(i){
   var a=ACH[i]; if(!a)return;
   loadStats();
@@ -558,10 +571,11 @@ function achInfo(i){
   var inner=document.createElement("div");
   inner.style.cssText="background:var(--c2);border-radius:22px;padding:24px;max-width:320px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.28)";
   inner.onclick=function(e){e.stopPropagation()};
-  inner.innerHTML='<div style="font-size:50px;line-height:1">'+a.ico+'</div>'+
+  var prog = (typeof cur==="number"&&a.n>1) ? '<div style="margin-top:12px"><div style="height:6px;border-radius:99px;background:var(--c1);overflow:hidden"><i style="display:block;height:100%;width:'+Math.min(100,Math.round(cur/a.n*100))+'%;background:linear-gradient(90deg,var(--p2),var(--p))"></i></div><div style="font-size:11px;color:var(--mu);margin-top:6px">'+cur+' / '+a.n+'</div></div>' : '';
+  inner.innerHTML='<div style="font-size:54px;line-height:1">'+a.ico+'</div>'+
     '<div style="font-size:17px;font-weight:800;color:var(--p);margin-top:10px">'+a.nm+'</div>'+
-    '<div style="font-size:13px;color:var(--ink);line-height:1.8;margin-top:12px">'+a.d+'</div>'+
-    '<div style="font-size:12px;margin-top:14px;font-weight:800;color:'+(on?'#2e9e57':'var(--mu)')+'">'+(on?'✓ 已获得':'未获得'+(typeof cur==="number"?' · 当前 '+cur+' / '+a.n:''))+'</div>';
+    '<div style="font-size:13px;color:var(--ink);line-height:1.8;margin-top:12px">'+a.d+'</div>'+prog+
+    '<div style="font-size:12px;margin-top:14px;font-weight:800;color:'+(on?'#2e9e57':'var(--mu)')+'">'+(on?'✓ 已获得':'还差 '+Math.max(0,a.n-(typeof cur==="number"?cur:0))+' 即可获得')+'</div>';
   box.innerHTML=""; box.appendChild(inner);
 }
 /* ================= 纪念日 ================= */
