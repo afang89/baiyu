@@ -195,6 +195,13 @@ to{opacity:1;transform:translate(-50%,0)}
 .poke-n{margin-top:10px;font-size:11px;color:var(--mu)}
 .poke-heart{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);font-size:66px;z-index:500;pointer-events:none;animation:pkPop .65s ease forwards}
 @keyframes pkPop{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}55%{transform:translate(-50%,-58%) scale(1.18);opacity:1}100%{transform:translate(-50%,-72%) scale(1);opacity:0}}
+
+.hug{position:fixed;inset:0;z-index:520;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.hug .txt{font-size:36px;font-weight:900;color:#d44a6a;letter-spacing:6px;text-shadow:0 6px 30px rgba(255,255,255,.95);animation:hugIn 1.7s ease forwards}
+@keyframes hugIn{0%{opacity:0;transform:scale(.6)}25%{opacity:1;transform:scale(1.08)}60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}
+.rain{position:fixed;inset:0;z-index:510;pointer-events:none;overflow:hidden}
+.rain span{position:absolute;top:-46px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(108vh) rotate(200deg)}}
 </style><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="白榆"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="data:image/png;base64,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">
 </head><div id="splash"><div class="sp-bg"></div><div class="sp-mask"></div><div class="sp-inner"><div class="sp-logo">白榆</div><div class="sp-sub">方方 和 欣欣的小家</div><div class="sp-bar"><i></i></div></div><div class="sp-skip" onclick="hideSplash()">跳过</div></div>
 <div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" src=""><div class="pv-cap" id="pvCap"></div></div>
@@ -288,7 +295,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-01-2";
+var APP_VER="2026-11-01-3";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -406,10 +413,41 @@ function myName(){return US.who==="ta"?CONFIG.her.nickname:CONFIG.me.nickname}
 function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
 function heartPop(){var h=document.createElement("div");h.className="poke-heart";h.textContent="💗";document.body.appendChild(h);setTimeout(function(){try{h.remove()}catch(e){}},700)}
 function pokeCount(){var d=ls("love_pokes_v1")||{};return d[ts()]||0}
+var pokeStreak=0,pokeTimer=null;
+function showHug(){
+  try{
+    var w=document.createElement("div"); w.className="hug";
+    var t2=document.createElement("div"); t2.className="txt"; t2.textContent="抱抱";
+    w.appendChild(t2); document.body.appendChild(w);
+    setTimeout(function(){try{w.remove()}catch(e){}},1800);
+  }catch(e){}
+}
+function heartRain(){
+  try{
+    var box=document.createElement("div"); box.className="rain";
+    var ics=["💗","💕","❤️","💖","🩷","✨"];
+    for(var i=0;i<40;i++){
+      var s=document.createElement("span");
+      s.textContent=ics[i%ics.length];
+      s.style.left=(Math.random()*96)+"%";
+      s.style.fontSize=(16+Math.random()*22)+"px";
+      s.style.animationDuration=(2.2+Math.random()*2.2)+"s";
+      s.style.animationDelay=(Math.random()*0.9)+"s";
+      box.appendChild(s);
+    }
+    document.body.appendChild(box);
+    setTimeout(function(){try{box.remove()}catch(e){}},5200);
+  }catch(e){}
+}
 function poke(){
   buzz(35); heartPop();
+  pokeStreak++; clearTimeout(pokeTimer);
+  pokeTimer=setTimeout(function(){pokeStreak=0},1500);
   var d=ls("love_pokes_v1")||{}; d[ts()]=(d[ts()]||0)+1; lws("love_pokes_v1",d);
-  renToday(); mqRaw({k:"__poke",v:{from:myName(),ts:Date.now()}}); toast("已戳 TA 一下 💗");
+  renToday();
+  if(pokeStreak>=10){ heartRain(); buzz(50); mqRaw({k:"__rain",v:{from:myName()}}); toast("送 TA 一场爱心雨 ❤️"); pokeStreak=0; }
+  else if(pokeStreak===3){ showHug(); buzz(40); mqRaw({k:"__hug",v:{from:myName()}}); toast("抱抱 🫂"); }
+  else { mqRaw({k:"__poke",v:{from:myName(),ts:Date.now()}}); toast("已戳 TA 一下 💗"); }
 }
 function renToday(){
   if(!$("tdNum"))return;
@@ -632,6 +670,8 @@ function handleMqMsg(topic,msg){
     if(!u||!u.k) return;
     if(u.k==="__req"){ mkSnap(); return }
     if(u.k==="__poke"){ buzz(220); heartPop(); toast(((u.v&&u.v.from)||"TA")+" 戳了你一下 💗"); if(CUR==="home")renToday(); return }
+    if(u.k==="__hug"){ buzz(60); showHug(); toast(((u.v&&u.v.from)||"TA")+" 抱住了你 🫂"); return }
+    if(u.k==="__rain"){ buzz(80); heartRain(); toast(((u.v&&u.v.from)||"TA")+" 送了你一场爱心雨 ❤️"); return }
     if(u.k==="game"){ handleGame(u.v); return }
     if(u.k==="gomoku"||u.k==="xiangqi"){ hGameMsg(u); return }
     var n=(u.t==="one")?pushOne(u.k,u.v):mergeIn(u.k,u.v);
