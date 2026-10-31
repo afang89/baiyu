@@ -318,7 +318,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-03-3";
+var APP_VER="2026-11-03-4";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -462,6 +462,7 @@ function heartRain(){
     setTimeout(function(){try{box.remove()}catch(e){}},5200);
   }catch(e){}
 }
+var pokeStreak=0,pokeTimer=null;
 function poke(){
   buzz(35); heartPop();
   pokeStreak++; clearTimeout(pokeTimer);
@@ -997,4 +998,5 @@ document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
+<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><div class="pv-cap" id="pvCap"></div></div>
 </body></html>
