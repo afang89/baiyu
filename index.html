@@ -255,6 +255,12 @@ body.locking{overflow:hidden;height:100dvh}
 
 <!-- 我们 -->
 <section class="view" id="v-us"><div class="topbar" style="position:static"><h2>💕 我们</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs"><span class="tb on" data-us="tags">性格</span><span class="tb" data-us="tl">时间轴</span><span class="tb" data-us="future">未来</span></div><div class="pan on" id="us-tags"><div class="card"><div class="hd"><h3>🦁 方方</h3></div><div id="meTags"></div></div><div class="card"><div class="hd"><h3>🐰 欣欣</h3></div><div id="herTags"></div></div></div><div class="pan" id="us-tl"><div id="tlList"></div><button class="btn" style="width:100%;margin-top:4px" onclick="tlNew()">＋ 添加新节点</button></div><div class="pan" id="us-future"><div class="pgrid" id="futureList"></div></div></div></section>
+<section class="view" id="v-set"><div class="topbar" style="position:static"><h2>⚙️ 设置</h2><div class="acts"><button class="top-ic" onclick="nav('us')">✕</button></div></div><div class="pg">
+<div class="card" style="padding:0;overflow:hidden"><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvMe">🦁</div><div><div class="pro-name">方方</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickMe"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('me')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euMeNick"></div><div class="pro-row"><label>标签</label><textarea id="euMeTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euMeCity"></div></div><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvHer">🐰</div><div><div class="pro-name">欣欣</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickHer"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('her')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euHerNick"></div><div class="pro-row"><label>标签</label><textarea id="euHerTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euHerCity"></div></div><div class="pro-card"><div class="pro-row"><label>我是</label><select id="euWho" style="flex:1;border:none;background:transparent;font-size:14px"><option value="me">方方</option><option value="ta">欣欣</option></select></div><div class="pro-row"><label>置顶回忆</label><input id="euMoment"></div><div class="pro-row"><label>暗号</label><input id="euLockPwd"></div><div class="pro-row"><label>音乐</label><input id="euMuUrl" placeholder="mp3 地址"></div><div class="pro-row"><label>收信邮箱</label><input id="euMailTo"></div><div class="pro-row" style="border:none"><label>版本</label><a onclick="showVer()" style="color:var(--p);font-weight:800;font-size:13px">白榆 v2 · 点此查看更新内容</a></div><div class="row" style="margin-top:12px"><button class="btn" onclick="saveUsEdit()">💾 保存</button><button class="gh" onclick="exportBackup()">📦 备份</button><button class="gh" onclick="importBackup()">📥 导入备份</button><button class="gh" onclick="syncLink()">📤 同步链接</button></div></div></div>
+<div class="card"><div class="hd"><h3>🔒 暗号</h3></div><div class="pro-row" style="border:none"><label>进入暗号</label><input id="setPwd" placeholder="211"></div><div style="padding:0 4px 4px"><button class="btn" style="width:100%" onclick="savePwd()">保存暗号</button></div></div>
+<div class="card"><div class="hd"><h3>📦 数据</h3></div><div style="display:flex;gap:10px"><button class="gh" style="flex:1" onclick="exportBackup()">导出备份</button><button class="gh" style="flex:1" onclick="importBackup()">导入备份</button></div><div style="margin-top:10px"><button class="gh" style="width:100%" onclick="syncLink()">🔗 复制同步链接</button></div></div>
+<div class="card"><div class="hd"><h3>ℹ️ 关于</h3></div><div style="font-size:12px;color:var(--mu);line-height:2">白榆 · 方方 &amp; 欣欣的小家<br>版本 <span id="setVer">-</span><br><a onclick="showVer()" style="color:var(--p);font-weight:800">查看更新内容</a></div></div>
+</div></section>
 
 <!-- 情绪 -->
 <section class="view" id="v-emotions"><div class="topbar" style="position:static"><h2>🎁 情绪盒子</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card" style="text-align:center;font-size:13px;color:var(--mu)"><b style="color:var(--p)">我们的约定</b><br>不冷战 · 认真接住对方所有情绪</div><div class="card"><select class="inp" id="emotionMood" style="margin-bottom:8px"><option>开心</option><option>想念</option><option>委屈</option><option>烦躁</option><option>其他</option></select><select class="inp" id="emotionAuthor" style="margin-bottom:8px"><option value="方方">方方</option><option value="欣欣">欣欣</option><option value="匿名">匿名</option></select><textarea class="inp" id="emotionText" rows="2" placeholder="此刻的情绪…" style="margin-bottom:8px"></textarea><button class="btn" style="width:100%" onclick="addEmotion()">放进盒子</button></div><div id="emotionList"></div></div></section>
@@ -312,7 +318,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-03-2";
+var APP_VER="2026-11-03-3";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -325,7 +331,10 @@ function checkUpdate(){
     }).catch(function(){});
   }catch(e){}
 }
-var CONFIG={me:{name:"方方",nickname:"方方",emoji:"🦁",city:"南京 · 江宁",hometown:"河南安阳",lat:31.9526,lon:118.8395,birthday:"2007-08-09",img:"",tags:["河南人","在南京上学","细心","行动派","守护型","一诺千金","爱打篮球"]},her:{name:"欣欣",nickname:"欣欣",emoji:"🐰",city:"达州 · 渠县",hometown:"达州 · 渠县",lat:30.8365,lon:106.9743,birthday:"2009-04-14",img:"",tags:["川妹子","可爱","小吃货","嘴硬心软","快乐源泉","有主见","我的乖乖"]},startDate:"2026-02-11",meetDate:"2021-05-23",milestones:[100,200,365,520,999,1314],timeline:[{date:"2021-05-23",title:"我们认识了",text:"在人群里遇见你，故事悄悄开始。"},{date:"2026-02-11",title:"我们在一起了",text:"终于牵到你的手，往后的每一天都是你。"}],future:[{icon:"🌉",title:"结束异地",text:"总有一天要在同一个城市醒来。"},{icon:"🍲",title:"一起去成都",text:"吃遍成都，也看看她长大的地方。"},{icon:"🎓",title:"一起毕业长大",text:"每个重要节点都一起走。"},{icon:"👨‍👩‍👧",title:"见彼此家人",text:"安阳和渠县的爸妈，要看到我们幸福的样子。"},{icon:"🌊",title:"去看海",text:"看一次海，看一次日出，拍很多合照。"},{icon:"❤️",title:"一直在一起",text:"不管距离多远，白榆里永远有我们。"}],quotes:["你是我平淡生活里最浪漫的惊喜。","遇见你之后，我的每一天都有了方向。","世界很大，而我心里只装得下一个你。","想把所有温柔都攒起来送给你。","和你在一起，连发呆都变得有趣。","希望我们一直在一起，慢慢变老。"],spin:["吃火锅","喝奶茶","看电影","散步","吃蛋糕","宅家"],dailyQ:["今天最想对方的一刻？","如果现在能见面，最想做什么？","今天没说出口的话？","最想一起做的小事？","偷偷夸TA的一件事？","给未来的我们留一句话。"],topMoment:""};
+var CONFIG={me:{name:"方方",nickname:"方方",emoji:"🦁",city:"南京 · 江宁",hometown:"河南安阳",lat:31.9526,lon:118.8395,birthday:"2007-08-09",img:"",tags:["河南人","在南京上学","细心","行动派","守护型","一诺千金","爱打篮球"]},her:{name:"欣欣",nickname:"欣欣",emoji:"🐰",city:"达州 · 渠县",hometown:"达州 · 渠县",lat:30.8365,lon:106.9743,birthday:"2009-04-14",img:"",tags:["川妹子","可爱","小吃货","嘴硬心软","快乐源泉","有主见","我的乖乖"]},startDate:"2026-02-11",meetDate:"2021-05-23",milestones:[100,200,365,520,999,1314],timeline:[{date:"2021-05-23",title:"我们认识了",text:"在人群里遇见你，故事悄悄开始。"},{date:"2026-02-11",title:"我们在一起了",text:"终于牵到你的手，往后的每一天都是你。"}],future:[{icon:"🌉",title:"结束异地",text:"总有一天要在同一个城市醒来。"},{icon:"🍲",title:"一起去成都",text:"吃遍成都，也看看她长大的地方。"},{icon:"🎓",title:"一起毕业长大",text:"每个重要节点都一起走。"},{icon:"👨‍👩‍👧",title:"见彼此家人",text:"安阳和渠县的爸妈，要看到我们幸福的样子。"},{icon:"🌊",title:"去看海",text:"看一次海，看一次日出，拍很多合照。"},{icon:"❤️",title:"一直在一起",text:"不管距离多远，白榆里永远有我们。"}],quotes:["你是我平淡生活里最浪漫的惊喜。","遇见你之后，我的每一天都有了方向。","世界很大，而我心里只装得下一个你。","想把所有温柔都攒起来送给你。","和你在一起，连发呆都变得有趣。","希望我们一直在一起，慢慢变老。"],spin:["吃火锅","喝奶茶","看电影","散步","吃蛋糕","宅家"],dailyQ:["今天最想对方的一刻？","如果现在能见面，最想做什么？","今天没说出口的话？","最想一起做的小事？","偷偷夸TA的一件事？","给未来的我们留一句话。"],topMoment:""};;
+/* 读取已保存的资料 */
+(function(){ try{ var raw=localStorage.getItem("love_config_v1"); if(!raw) return; var o=JSON.parse(raw); for(var k in o){ if(o[k]!==undefined&&o[k]!==null) CONFIG[k]=o[k] } }catch(e){} })();
+function svConfig(){ try{ localStorage.setItem("love_config_v1", JSON.stringify(CONFIG)) }catch(e){} }
 var MUSIC_URL="https://music.163.com/song/media/outer/url?id=5238992.mp3";
 var MQTT_URL="wss://broker.emqx.io:8084/mqtt",ROOM="baiyu/room211";
 /* ================= 存储 ================= */
@@ -850,6 +859,126 @@ function step(ts2){if(!t1)t1=ts2;var p=Math.min(1,(ts2-t1)/dur);el.textContent=M
 function copyText(s){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).catch(function(){});return}var a=document.createElement("textarea");a.value=s;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}
 document.addEventListener("keydown",function(e){var l=$("lock");if(e.key==="Enter"&&l&&!l.classList.contains("off"))unlock()});
 
+
+/* ===== 恢复：渲染 / 天气 / 设置 / 互动特效 ===== */
+function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
+function myName(){return US.who==="ta"?(CONFIG.her.nickname||"欣欣"):(CONFIG.me.nickname||"方方")}
+function heartPop(){
+  try{
+    var h=document.createElement("div"); h.textContent="💗";
+    h.style.cssText="position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);font-size:64px;z-index:8000;pointer-events:none;animation:pkPop .65s ease forwards";
+    document.body.appendChild(h); setTimeout(function(){try{h.remove()}catch(e){}},700);
+  }catch(e){}
+}
+function showHug(){
+  try{
+    var w=document.createElement("div");
+    w.style.cssText="position:fixed;inset:0;z-index:8000;display:flex;align-items:center;justify-content:center;pointer-events:none";
+    var t=document.createElement("div"); t.textContent="抱抱";
+    t.style.cssText="font-size:38px;font-weight:900;color:#d44a6a;letter-spacing:6px;animation:hugIn 1.7s ease forwards";
+    w.appendChild(t); document.body.appendChild(w); setTimeout(function(){try{w.remove()}catch(e){}},1800);
+  }catch(e){}
+}
+function fxPlus(k){var f=ls("love_fx_v1")||{};f[k]=(f[k]||0)+1;lws("love_fx_v1",f)}
+function pokeCount(){var d=ls("love_pokes_v1")||{};return d[ts()]||0}
+function fmtCity(p){return (p&&p.city)?p.city:""}
+function wt2(c){
+  if(c===0)return["晴","☀️"]; if(c<=2)return["多云","🌤️"]; if(c===3)return["阴","☁️"];
+  if(c>=51&&c<=57)return["毛毛雨","🌦️"]; if(c>=71&&c<=77)return["雪","🌨️"];
+  if(c>=61)return["雨","🌧️"]; if(c>=80)return["雷雨","⛈️"]; return["—","🌈"];
+}
+var wcache={};
+function cw(p){
+  var k=Math.round(p.lat*10000)+","+Math.round(p.lon*10000);
+  if(wcache[k])return Promise.resolve(wcache[k]);
+  var s=ls("love_wx_"+k);
+  if(s&&Date.now()-s.t<1800000){wcache[k]=s.d;return Promise.resolve(s.d)}
+  var u="https://api.open-meteo.com/v1/forecast?latitude="+p.lat+"&longitude="+p.lon+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=3";
+  return fetch(u).then(function(r){return r.json()}).then(function(d){wcache[k]=d;lws("love_wx_"+k,{t:Date.now(),d:d});return d});
+}
+function renWx(){
+  var s=$("miniWX"); if(!s)return;
+  var wrap=document.createElement("div"); wrap.className="wx-both";
+  [CONFIG.me,CONFIG.her].forEach(function(p){
+    var d=document.createElement("div"); d.className="wx-mini";
+    d.innerHTML='<span class="wi">—</span><div style="flex:1"><div class="wt">-°</div><div class="wm">'+esc(fmtCity(p))+'</div></div><span class="ws">加载</span>';
+    wrap.appendChild(d);
+    cw(p).then(function(x){
+      var w=wt2(x.current.weather_code);
+      d.querySelector(".wi").textContent=w[1];
+      d.querySelector(".wt").textContent=Math.round(x.current.temperature_2m)+"°";
+      d.querySelector(".ws").textContent=w[0];
+    }).catch(function(){ d.querySelector(".wi").textContent="🌈"; d.querySelector(".ws").textContent="离线" });
+  });
+  s.innerHTML=""; s.appendChild(wrap);
+}
+function loadWx(){ renWx() }
+function nextQuote(){
+  var q=CONFIG.quotes||["想把所有温柔都攒起来送给你。"];
+  var t=$("todayQuote"); if(t)t.textContent=q[Math.floor(Math.random()*q.length)];
+}
+function homeNum(v){ return (v===null||v===undefined||isNaN(v))?"-":(v+"天") }
+function renHome(){
+  try{
+    var now=t0(), mt=pD(CONFIG.meetDate), st=pD(CONFIG.startDate);
+    var meetD=Math.abs(dD(mt,now)), loveD=Math.abs(dD(st,now));
+    function nextB(b){var p=String(b||"").split("-");if(p.length<3)return null;var d=new Date(now.getFullYear(),+p[1]-1,+p[2]);if(d<now)d.setFullYear(d.getFullYear()+1);return dD(now,d)}
+    function nextA(){var d=new Date(now.getFullYear(),st.getMonth(),st.getDate());if(d<now)d.setFullYear(d.getFullYear()+1);return dD(now,d)}
+    if($("meAv"))setAv($("meAv"),CONFIG.me);
+    if($("herAv"))setAv($("herAv"),CONFIG.her);
+    if($("heroNick"))$("heroNick").textContent=(CONFIG.me.nickname||"方方")+" & "+(CONFIG.her.nickname||"欣欣");
+    if($("loveTimer"))$("loveTimer").textContent="在一起 "+loveD+" 天";
+    if($("sMeet"))$("sMeet").textContent=meetD;
+    if($("sLove"))$("sLove").textContent=loveD;
+    if($("sBirth"))$("sBirth").textContent=homeNum(nextB(CONFIG.her.birthday));
+    if($("sAnniv"))$("sAnniv").textContent=homeNum(nextA());
+    if($("todayQuote")){var q=CONFIG.quotes||[""];$("todayQuote").textContent=q[Math.floor(Date.now()/86400000)%q.length]}
+    renToday(); renAchMini(); renWx();
+  }catch(e){}
+}
+var AVEMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
+function pickAv(who,e){
+  if(who==="me"){CONFIG.me.emoji=e;US.meEmoji=e}else{CONFIG.her.emoji=e;US.herEmoji=e}
+  svUS(); try{svConfig()}catch(x){}; fillUsEdit(); renHome(); toast("头像换好啦 ✨");
+}
+function fillUsEdit(){
+  try{
+    if($("pvMe"))setAv($("pvMe"),CONFIG.me);
+    if($("pvHer"))setAv($("pvHer"),CONFIG.her);
+    var m={euMeNick:CONFIG.me.nickname,euMeTags:(CONFIG.me.tags||[]).join("、"),euMeCity:CONFIG.me.city,
+           euHerNick:CONFIG.her.nickname,euHerTags:(CONFIG.her.tags||[]).join("、"),euHerCity:CONFIG.her.city,
+           euMoment:CONFIG.topMoment||"",euMuUrl:US.musicUrl||"",euMailTo:US.mailTo||"",euLockPwd:US.lockPassword||"211"};
+    for(var k in m){var el=$(k);if(el)el.value=m[k]}
+    if($("euWho"))$("euWho").value=US.who||"me";
+    if($("setPwd"))$("setPwd").value=String(US.lockPassword||"211");
+    if($("setVer"))$("setVer").textContent=APP_VER;
+    [["pickMe","me"],["pickHer","her"]].forEach(function(pair){
+      var box=$(pair[0]); if(!box)return;
+      box.innerHTML=AVEMO.map(function(e){
+        var on=(pair[1]==="me"?CONFIG.me.emoji:CONFIG.her.emoji)===e;
+        return '<span onclick="pickAv(\''+pair[1]+'\',\''+e+'\')" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;margin:0 4px 6px 0;font-size:19px;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'box-shadow:0 0 0 2px var(--p) inset':'')+'">'+e+'</span>';
+      }).join("");
+    });
+  }catch(e){}
+}
+function saveUsEdit(){
+  try{
+    if($("euMeNick"))CONFIG.me.nickname=$("euMeNick").value.trim()||CONFIG.me.nickname;
+    if($("euMeTags"))CONFIG.me.tags=$("euMeTags").value.split(/[、,，\s]+/).filter(Boolean);
+    if($("euMeCity"))CONFIG.me.city=$("euMeCity").value.trim()||CONFIG.me.city;
+    if($("euHerNick"))CONFIG.her.nickname=$("euHerNick").value.trim()||CONFIG.her.nickname;
+    if($("euHerTags"))CONFIG.her.tags=$("euHerTags").value.split(/[、,，\s]+/).filter(Boolean);
+    if($("euHerCity"))CONFIG.her.city=$("euHerCity").value.trim()||CONFIG.her.city;
+    if($("euMoment"))CONFIG.topMoment=$("euMoment").value.trim();
+    if($("euWho"))US.who=$("euWho").value;
+    if($("euMuUrl"))US.musicUrl=$("euMuUrl").value.trim();
+    if($("euMailTo"))US.mailTo=$("euMailTo").value.trim();
+    if($("euLockPwd"))US.lockPassword=$("euLockPwd").value.trim();
+    svUS(); try{svConfig()}catch(e){}
+    renHome(); renUs(); fillUsEdit(); toast("保存好啦 ✨");
+  }catch(e){ toast("保存失败："+e.message) }
+}
+
 function init(){
   try{ if(/\bwv\b|; wv\)/.test(navigator.userAgent||"")) document.body.classList.add("inapp") }catch(e){}checkLock();checkImportHash();initMusic();startTimeSet();bindPhotoInput();$("themeSel").value=US.theme||"pink";renHome();stM();setTimeout(checkUpdate,2500)}
 window.__back=function(){
@@ -867,10 +996,5 @@ window.__back=function(){
 document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
-<section class="view" id="v-set"><div class="topbar" style="position:static"><h2>⚙️ 设置</h2><div class="acts"><button class="top-ic" onclick="nav('us')">✕</button></div></div><div class="pg">
-<div class="card" style="padding:0;overflow:hidden"><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvMe">🦁</div><div><div class="pro-name">方方</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickMe"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('me')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euMeNick"></div><div class="pro-row"><label>标签</label><textarea id="euMeTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euMeCity"></div></div><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvHer">🐰</div><div><div class="pro-name">欣欣</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickHer"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('her')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euHerNick"></div><div class="pro-row"><label>标签</label><textarea id="euHerTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euHerCity"></div></div><div class="pro-card"><div class="pro-row"><label>我是</label><select id="euWho" style="flex:1;border:none;background:transparent;font-size:14px"><option value="me">方方</option><option value="ta">欣欣</option></select></div><div class="pro-row"><label>置顶回忆</label><input id="euMoment"></div><div class="pro-row"><label>暗号</label><input id="euLockPwd"></div><div class="pro-row"><label>音乐</label><input id="euMuUrl" placeholder="mp3 地址"></div><div class="pro-row"><label>收信邮箱</label><input id="euMailTo"></div><div class="pro-row" style="border:none"><label>版本</label><a onclick="showVer()" style="color:var(--p);font-weight:800;font-size:13px">白榆 v2 · 点此查看更新内容</a></div><div class="row" style="margin-top:12px"><button class="btn" onclick="saveUsEdit()">💾 保存</button><button class="gh" onclick="exportBackup()">📦 备份</button><button class="gh" onclick="importBackup()">📥 导入备份</button><button class="gh" onclick="syncLink()">📤 同步链接</button></div></div></div>
-<div class="card"><div class="hd"><h3>🔒 暗号</h3></div><div class="pro-row" style="border:none"><label>进入暗号</label><input id="setPwd" placeholder="211"></div><div style="padding:0 4px 4px"><button class="btn" style="width:100%" onclick="savePwd()">保存暗号</button></div></div>
-<div class="card"><div class="hd"><h3>📦 数据</h3></div><div style="display:flex;gap:10px"><button class="gh" style="flex:1" onclick="exportBackup()">导出备份</button><button class="gh" style="flex:1" onclick="importBackup()">导入备份</button></div><div style="margin-top:10px"><button class="gh" style="width:100%" onclick="syncLink()">🔗 复制同步链接</button></div></div>
-<div class="card"><div class="hd"><h3>ℹ️ 关于</h3></div><div style="font-size:12px;color:var(--mu);line-height:2">白榆 · 方方 &amp; 欣欣的小家<br>版本 <span id="setVer">-</span><br><a onclick="showVer()" style="color:var(--p);font-weight:800">查看更新内容</a></div></div>
-</div></section>
+
 </body></html>
