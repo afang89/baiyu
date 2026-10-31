@@ -149,13 +149,33 @@ body.pf *{animation:none!important;transition:none!important}
 .modal h3{color:var(--p);text-align:center;margin-bottom:12px}
 /* ============ 隐藏 CodeSandbox 注入 ============ */
 [id^="sb__open-sandbox"],iframe[id^="sb__"],div[class*="watermark"],div[class*="csb"],div[class*="sandbox"],iframe[src*="codesandbox"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;width:0!important;height:0!important;position:absolute!important;z-index:-9999!important}
+
+/* 游戏图标网格 & 独立窗口 */
+.gicon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.gicon{background:var(--c2);border-radius:22px;padding:22px 12px;text-align:center;box-shadow:var(--sh);transition:transform .16s ease,box-shadow .2s}
+.gicon:active{transform:scale(.95)}
+.gicon .gi{font-size:36px;line-height:1.1}
+.gicon .gn{font-size:14px;font-weight:800;color:var(--p);margin-top:8px}
+.gicon .gd{font-size:11px;color:var(--mu);margin-top:2px}
+.gwin{position:fixed;inset:0;z-index:240;background:var(--bg);display:none;flex-direction:column}
+.gwin.on{display:flex;animation:in .22s ease}
+.gw-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--c2);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.gw-bar b{font-size:16px;color:var(--p);font-weight:800}
+.gw-bar button{width:34px;height:34px;border-radius:50%;background:var(--ac);font-size:16px;display:flex;align-items:center;justify-content:center}
+.gw-body{flex:1;overflow-y:auto;padding:16px 16px 40px;-webkit-overflow-scrolling:touch}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:#c9c1c4;display:inline-block;margin-right:2px;transition:background .3s}
+/* 升级版提示条 */
+.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-14px);z-index:400;max-width:82vw;background:rgba(255,255,255,.94);color:var(--ink);font-size:13px;font-weight:700;padding:13px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.7);box-shadow:0 14px 38px rgba(0,0,0,.14);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;text-align:center;line-height:1.5}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+[data-theme="dark"] .toast{background:rgba(44,44,58,.95);color:#eee;border-color:rgba(255,255,255,.12)}
+
 </style><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="白榆"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="data:image/png;base64,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">
 </head><body data-theme="pink">
 <div class="lock" id="lock"><div class="bx"><div class="av">🌿</div><h2>白榆</h2><p style="font-size:12px;color:var(--mu);margin:4px 0 16px">方方 & 欣欣的小家</p><input class="inp" id="lockIn" type="password" placeholder="暗号" autocomplete="off" style="text-align:center"><button class="btn" style="width:100%;margin-top:12px" onclick="unlock()">🔓 进入</button></div></div>
 <audio id="bgm" loop></audio><button class="mubtn" id="muBtn" onclick="toggleMusic()">🎵</button><div class="toast" id="toast"></div>
 <input type="file" id="photoInput" accept="image/*" multiple style="display:none">
 <div id="app">
-<div class="topbar"><h2>🌿 白榆</h2><div class="acts"><select class="theme-sel" id="themeSel" onchange="setTheme(this.value)"><option value="pink">🌸</option><option value="blue">🌊</option><option value="green">🍃</option><option value="dark">🌙</option><option value="morandi">🍂</option></select><button class="top-ic" onclick="nav('photos')">📸</button></div></div>
+<div class="topbar"><h2>🌿 白榆</h2><div class="acts"><span class="sync-dot" id="syncDot"></span><select class="theme-sel" id="themeSel" onchange="setTheme(this.value)"><option value="pink">🌸</option><option value="blue">🌊</option><option value="green">🍃</option><option value="dark">🌙</option><option value="morandi">🍂</option></select><button class="top-ic" onclick="nav('photos')">📸</button></div></div>
 
 <!-- 首页 -->
 <section class="view on" id="v-home">
@@ -205,21 +225,33 @@ body.pf *{animation:none!important;transition:none!important}
 <section class="view" id="v-achievements"><div class="topbar" style="position:static"><h2>🏆 成就</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>徽章</h3><span id="achUnlocked" style="font-size:14px;font-weight:800;color:var(--p)"></span></div><div class="ach-grid" id="achGrid"></div></div></div></section>
 
 <!-- 一起玩 -->
-<section class="view" id="v-games"><div class="topbar" style="position:static"><h2>🎮 一起玩</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg">
-<div class="card"><div class="hd"><h3>⭕❌ 井字棋</h3><span class="sync-badge" id="ttStatus">…</span></div><div class="game-grid" style="grid-template-columns:repeat(3,1fr)" id="ttBoard"></div><div id="ttTurn" style="text-align:center;margin-top:10px;font-size:14px;font-weight:800;color:var(--p)"></div><div style="text-align:center;margin-top:6px"><button class="gh" onclick="ttReset()">🔄 重新开始</button></div></div>
-<div class="card"><div class="hd"><h3>✊✋✌️ 石头剪刀布</h3><span class="sync-badge" id="rpsStatus">…</span></div><div class="row" style="justify-content:center"><button class="btn" onclick="rpsPlay('✊')">✊</button><button class="btn" onclick="rpsPlay('✋')">✋</button><button class="btn" onclick="rpsPlay('✌️')">✌️</button></div><div id="rpsResult" style="text-align:center;margin-top:12px;font-size:15px;font-weight:800;color:var(--p);min-height:24px"></div><div style="text-align:center;margin-top:6px"><button class="gh" onclick="rpsReset()">🔄 重来</button></div></div>
-<div class="card"><div class="hd"><h3>⚫⚪ 五子棋</h3><span class="sync-badge" id="goStatus">…</span></div><div id="goTurn" style="text-align:center;font-size:14px;font-weight:800;color:var(--p);margin-bottom:8px"></div><div class="game-grid" style="grid-template-columns:repeat(15,1fr)" id="goBoard"></div><div style="text-align:center;margin-top:8px"><button class="gh" onclick="goReset()">🔄 重来</button></div></div>
-<div class="card"><div class="hd"><h3>♟️ 中国象棋</h3><span class="sync-badge" id="xqStatus">…</span></div><div id="xqTurn" style="text-align:center;font-size:14px;font-weight:800;color:var(--p);margin-bottom:8px"></div><div class="game-grid" style="grid-template-columns:repeat(9,1fr)" id="xqBoard"></div><div style="text-align:center;margin-top:8px"><button class="gh" onclick="xqReset()">🔄 重来</button></div></div>
-<div class="card"><div class="hd"><h3>💗 心跳对决</h3><span class="sync-badge" id="tapStatus">…</span></div><div style="text-align:center"><div class="tap-btn" onclick="tapClick()">💗</div><div style="font-size:13px;color:var(--mu)">狂点同一个爱心，先到 10 下的人赢</div></div><div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>我</span><b id="tapMeTxt">0</b></div><div class="tap-bar"><div class="tap-fill" id="tapMeBar"></div></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>TA</span><b id="tapTaTxt">0</b></div><div class="tap-bar"><div class="tap-fill" id="tapTaBar"></div></div><div id="tapInfo" style="margin-top:6px;font-size:14px;font-weight:800;color:var(--p)"></div><div style="text-align:center;margin-top:8px"><button class="gh" onclick="tapReset()">🔄 重来</button></div></div></div>
-<div class="card"><div class="hd"><h3>🃏 翻翻乐</h3><span class="sync-badge" id="memStatus">…</span></div><div id="memInfo" style="text-align:center;font-size:13px;font-weight:800;color:var(--p);margin-bottom:10px">两人同一副牌，看谁先翻完</div><div class="mem-grid" id="memGrid"></div><div style="text-align:center;margin-top:10px;font-size:12px;color:var(--mu)">我的用时 <b id="memTime">0.0</b> 秒 · TA 用时 <b id="memTaTime">—</b></div><div style="text-align:center;margin-top:6px"><button class="gh" onclick="memReset()">🔄 重来</button></div></div>
-</div></section>
+<section class="view" id="v-games"><div class="topbar" style="position:static"><h2>🎮 一起玩</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="gicon-grid">
+<div class="gicon" onclick="openGame('tt')"><div class="gi">⭕❌</div><div class="gn">井字棋</div><div class="gd">三子连线</div></div>
+<div class="gicon" onclick="openGame('rps')"><div class="gi">✊✋✌️</div><div class="gn">石头剪刀布</div><div class="gd">同时出拳</div></div>
+<div class="gicon" onclick="openGame('go')"><div class="gi">⚫⚪</div><div class="gn">五子棋</div><div class="gd">五连获胜</div></div>
+<div class="gicon" onclick="openGame('xq')"><div class="gi">♟️</div><div class="gn">中国象棋</div><div class="gd">吃帅制</div></div>
+<div class="gicon" onclick="openGame('tap')"><div class="gi">💗</div><div class="gn">心跳对决</div><div class="gd">谁点得快</div></div>
+<div class="gicon" onclick="openGame('mem')"><div class="gi">🃏</div><div class="gn">翻翻乐</div><div class="gd">记忆配对</div></div>
+</div><div style="text-align:center;font-size:11px;color:var(--mu);margin-top:16px;line-height:1.7">两台手机同时进入同一个游戏<br>即可实时对战 💕</div></div></section>
+
+<div class="gwin" id="gw-tt"><div class="gw-bar"><b>⭕❌ 井字棋</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>轮到谁</h3><span class="sync-badge" id="ttStatus">…</span></div><div class="game-grid" style="grid-template-columns:repeat(3,1fr)" id="ttBoard"></div><div id="ttTurn" style="text-align:center;margin-top:12px;font-size:15px;font-weight:800;color:var(--p)"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="ttReset()">🔄 重新开始</button></div></div></div></div>
+
+<div class="gwin" id="gw-rps"><div class="gw-bar"><b>✊✋✌️ 石头剪刀布</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>出拳</h3><span class="sync-badge" id="rpsStatus">…</span></div><div class="row" style="justify-content:center;gap:12px"><button class="btn" onclick="rpsPlay('✊')">✊</button><button class="btn" onclick="rpsPlay('✋')">✋</button><button class="btn" onclick="rpsPlay('✌️')">✌️</button></div><div id="rpsResult" style="text-align:center;margin-top:16px;font-size:15px;font-weight:800;color:var(--p);min-height:24px"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="rpsReset()">🔄 重来</button></div></div></div></div>
+
+<div class="gwin" id="gw-go"><div class="gw-bar"><b>⚫⚪ 五子棋</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>15 路棋盘</h3><span class="sync-badge" id="goStatus">…</span></div><div id="goTurn" style="text-align:center;font-size:15px;font-weight:800;color:var(--p);margin-bottom:10px"></div><div class="game-grid" style="grid-template-columns:repeat(15,1fr)" id="goBoard"></div><div style="text-align:center;margin-top:12px"><button class="gh" onclick="goReset()">🔄 重来</button></div></div></div></div>
+
+<div class="gwin" id="gw-xq"><div class="gw-bar"><b>♟️ 中国象棋</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>吃帅制</h3><span class="sync-badge" id="xqStatus">…</span></div><div id="xqTurn" style="text-align:center;font-size:15px;font-weight:800;color:var(--p);margin-bottom:10px"></div><div class="game-grid" style="grid-template-columns:repeat(9,1fr)" id="xqBoard"></div><div style="text-align:center;margin-top:12px"><button class="gh" onclick="xqReset()">🔄 重来</button></div></div></div></div>
+
+<div class="gwin" id="gw-tap"><div class="gw-bar"><b>💗 心跳对决</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>先到 10 下获胜</h3><span class="sync-badge" id="tapStatus">…</span></div><div style="text-align:center"><div class="tap-btn" onclick="tapClick()">💗</div></div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>我</span><b id="tapMeTxt">0</b></div><div class="tap-bar"><div class="tap-fill" id="tapMeBar"></div></div><div style="display:flex;justify-content:space-between;font-size:12px"><span>TA</span><b id="tapTaTxt">0</b></div><div class="tap-bar"><div class="tap-fill" id="tapTaBar"></div></div><div id="tapInfo" style="margin-top:8px;text-align:center;font-size:15px;font-weight:800;color:var(--p)"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="tapReset()">🔄 重来</button></div></div></div></div></div>
+
+<div class="gwin" id="gw-mem"><div class="gw-bar"><b>🃏 翻翻乐</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>同一副牌比速度</h3><span class="sync-badge" id="memStatus">…</span></div><div id="memInfo" style="text-align:center;font-size:13px;font-weight:800;color:var(--p);margin-bottom:12px">两人同一副牌，看谁先翻完</div><div class="mem-grid" id="memGrid"></div><div style="text-align:center;margin-top:12px;font-size:12px;color:var(--mu)">我的用时 <b id="memTime">0.0</b> 秒 · TA 用时 <b id="memTaTime">—</b></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="memReset()">🔄 重来</button></div></div></div></div>
 </div>
 
 <nav class="bnav"><a data-route="home" class="on" onclick="nav('home')"><span class="ic">🏠</span>首页</a><a data-route="emotions" onclick="nav('emotions')"><span class="ic">🎁</span>情绪</a><a data-route="wishes" onclick="nav('wishes')"><span class="ic">✅</span>心愿</a><a data-route="play" onclick="nav('play')"><span class="ic">🎡</span>互动</a><a data-route="us" onclick="nav('us')"><span class="ic">💕</span>我们</a></nav>
 
 <div class="modal" id="tlEdit"><div class="box"><h3>✏️ 编辑节点</h3><input class="inp" id="tlD" placeholder="日期，例 2025-06-01"><input class="inp" id="tlT" placeholder="标题" style="margin-top:8px"><textarea class="inp" id="tlX" rows="2" placeholder="描述" style="margin-top:8px"></textarea><div class="row" style="margin-top:12px;justify-content:center"><button class="btn" onclick="tlSave()">保存</button><button class="gh" onclick="tlClose()">取消</button><button class="gh" style="color:#c4455a" onclick="tlDel()">删除</button></div><input type="hidden" id="tlIdx"></div></div>
 
-<script src="https://cdn.jsdelivr.net/npm/mqtt/dist/mqtt.min.js"></script>
+<!-- MQTT 已内联，无外部依赖 -->
 
 <script>
 /* ================= 白榆 · 重写版 ================= */
@@ -252,8 +284,23 @@ function countUp(el,n,post){if(!el)return;post=post||"";if(document.body.classLi
 function checkLock(){var on=US.lockEnabled!==false;var u=false;try{u=sessionStorage.getItem("baiyu_unlocked")==="yes"}catch(e){}if(!on||u)$("lock").classList.add("off")}
 function unlock(){var p=String(US.lockPassword||"211");if($("lockIn").value===p){try{sessionStorage.setItem("baiyu_unlocked","yes")}catch(e){}$("lock").classList.add("off");toast("欢迎回家 🌿")}else{toast("暗号不对 💭");$("lockIn").value="";$("lockIn").focus()}}
 document.addEventListener("keydown",function(e){if(e.key==="Enter"&&!$("lock").classList.contains("off"))unlock()});
-function initMusic(){var a=$("bgm");a.src=US.musicUrl||MUSIC_URL;if(US.musicAutoplay){var p=a.play();if(p&&p.catch)p.catch(function(){})}}
-function toggleMusic(){var a=$("bgm"),b=$("muBtn");if(a.paused){a.play().then(function(){b.textContent="⏸"}).catch(function(){toast("先点一下页面 🎵")})}else{a.pause();b.textContent="🎵"}}
+function initMusic(){
+  var a=$("bgm"),b=$("muBtn");
+  a.preload="auto";
+  a.src=US.musicUrl||MUSIC_URL;
+  a.addEventListener("playing",function(){if(b)b.textContent="⏸"});
+  a.addEventListener("pause",function(){if(b)b.textContent="🎵"});
+  a.addEventListener("error",function(){toast("音乐加载失败，可在「我们→✏️→音乐」换成你的 mp3 链接")});
+  if(US.musicAutoplay){var p=a.play();if(p&&p.catch)p.catch(function(){})}
+}
+function toggleMusic(){
+  var a=$("bgm");
+  if(!a.src) a.src=US.musicUrl||MUSIC_URL;
+  if(a.paused){
+    var p=a.play();
+    if(p&&p.then) p.then(function(){}).catch(function(){toast("点一下再来一次 🎵")});
+  }else{ a.pause() }
+}
 /* ================= 主题 ================= */
 function setTheme(t){document.body.setAttribute("data-theme",t);US.theme=t;svUS()}
 /* ================= 计时 ================= */
@@ -262,7 +309,7 @@ function startTimeSet(){var el=$("loveTimer");if(!el)return;function tick(){var 
 function dateInfo(){var n=t0(),st=pD(CONFIG.startDate),mt=pD(CONFIG.meetDate),before=st>n,ld=Math.abs(dD(st,n)),md=Math.abs(dD(mt,n));var an=new Date(n.getFullYear(),st.getMonth(),st.getDate());if(an<n)an.setFullYear(an.getFullYear()+1);function nb(birth){var p=String(birth).split("-"),d=new Date(n.getFullYear(),+p[1]-1,+p[2]);if(d<n)d.setFullYear(d.getFullYear()+1);return{left:dD(n,d),date:fmt(d)}}return{loveDays:ld,meetDays:md,before:before,annivLeft:dD(n,an),annivDate:fmt(an),myB:nb(CONFIG.me.birthday),taB:nb(CONFIG.her.birthday)}}
 function distKm(){var R=6371,ra=Math.PI/180,a=CONFIG.me,b=CONFIG.her,dl=(b.lat-a.lat)*ra,dn=(b.lon-a.lon)*ra;var h=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*ra)*Math.cos(b.lat*ra)*Math.sin(dn/2)*Math.sin(dn/2);return Math.round(R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)))}
 /* ================= 路由 ================= */
-function nav(r){document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games"){renGames();transactionalize()}window.scrollTo(0,0)}
+function nav(r){document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
 /* ================= 头像 ================= */
 var EMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
 function setAv(el,p){if(!el)return;if(p.img){el.style.backgroundImage="url("+p.img+")";el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.textContent=""}else{el.style.backgroundImage="none";el.textContent=p.emoji}}
@@ -353,14 +400,107 @@ function closeKg(){$("kgWrap").style.display="none"}
 function openKgNew(){var f=$("kgFrame");if(f&&f.src)window.open(f.src,"_blank")}
 function loadListen(){var v=$("listenInput").value.trim();if(!v)return;var a=$("listenAudio");if(/^[0-9]+$/.test(v)){a.src="https://music.163.com/song/media/outer/url?id="+v+".mp3"}else if(/^http/.test(v)){a.src=v}else{a.src=MUSIC_URL;toast("默认播放：《偏爱》 🎵")}a.play().catch(function(){toast("点一下播放键 ▶")})}
 /* ================= MQTT 同步 ================= */
-var mc=null,mo=false;
-function stM(){if(typeof mqtt==="undefined"){setTimeout(stM,2500);return}try{mc=mqtt.connect(MQTT_URL,{clientId:"baiyu_"+Math.random().toString(36).slice(2,8),keepalive:30,clean:true,reconnectPeriod:5000});mc.on("connect",function(){mo=true;mc.subscribe(ROOM);setGameStatus()});mc.on("message",handleMqMsg);mc.on("close",function(){mo=false;setTimeout(stM,5000)});mc.on("error",function(){mo=false})}catch(e){setTimeout(stM,5000)}}
-function mqRaw(v){if(!mo||!mc)return;try{mc.publish(ROOM,JSON.stringify(v))}catch(e){}}
-var SYNC_KEYS={love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_photos_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1};
-function lw(k,v){lws(k,v);if(SYNC_KEYS[k]){if(k==="love_daily_v1"||k==="love_checkin_v1"||k==="love_letters_v1"){mqRaw({k:k,v:v,t:"obj"})}else if(Array.isArray(v)&&v.length){mqRaw({k:k,v:v[v.length-1],t:"arr"})}}}
-function handleMqMsg(t,msg){try{var u=JSON.parse(msg.toString());if(!u||!u.k)return;if(u.k==="game"){handleGame(u.v);return}if(u.k==="gomoku"||u.k==="xiangqi"){handleGame(u);return}var lo=ls(u.k);if(u.t==="arr"){if(!lo)lo=[];var ids={};lo.forEach(function(x){if(x.id)ids[x.id]=true});if(u.v&&u.v.id&&!ids[u.v.id]){lo.push(u.v);lws(u.k,lo)}}else if(u.t==="obj"){if(!lo)lo={};if(u.k==="love_daily_v1"||u.k==="love_checkin_v1"){for(var kk in u.v){if(u.v[kk]&&!lo[kk])lo[kk]=u.v[kk]}}else if(u.k==="love_letters_v1"){var ids2={};lo.forEach(function(x){if(x.id)ids2[x.id]=true});if(u.v.id&&!ids2[u.v.id])lo.push(u.v)}else{for(var kk2 in u.v){if(u.v[kk2]&&!lo[kk2])lo[kk2]=u.v[kk2]}}lws(u.k,lo)}if(CUR==="home"){renWx();renAchMini()}else nav(CUR)}catch(e){}}
+var syncCli=null,syncOn=false,syncTry=0,syncTimer=null;
+function setSyncDot(on){
+  var d=document.getElementById("syncDot"); if(!d) return;
+  d.style.background=on?"#39b54a":"#c9c1c4";
+  d.title=on?"实时同步已连接":"同步未连接（重试中）";
+}
+function MiniMqtt(url,clientId,onMsg,onState){
+  var self=this,ws=null;
+  function enc(n){var o=[];do{var d=n%128;n=Math.floor(n/128);if(n>0)d|=128;o.push(d)}while(n>0);return o}
+  function utf8(s){var b=[],i,c;for(i=0;i<s.length;i++){c=s.charCodeAt(i);if(c<128)b.push(c);else if(c<2048){b.push(192|(c>>6),128|(c&63))}else{b.push(224|(c>>12),128|((c>>6)&63),128|(c&63))}}return [b.length>>8,b.length&255].concat(b)}
+  function frame(type,flags,payload){return [((type<<4)|flags)].concat(enc(payload.length)).concat(payload)}
+  this.send=function(bytes){if(ws&&ws.readyState===1)ws.send(new Uint8Array(bytes))};
+  this.connect=function(){
+    try{ws=new WebSocket(url,"mqtt")}catch(err){onState(false);return}
+    ws.binaryType="arraybuffer";
+    ws.onopen=function(){self.send(frame(1,0,utf8("MQTT").concat([4,2,0,60]).concat(utf8(clientId))))};
+    ws.onmessage=function(ev){
+      var d=new Uint8Array(ev.data),p=1,rl=0,mul=1,b;
+      while(true){b=d[p++];rl+=(b&127)*mul;mul*=128;if(!(b&128))break}
+      var body=d.subarray(p,p+rl),type=d[0]>>4;
+      if(type===2){onState(true);self.send(frame(8,2,[0,1].concat(utf8(ROOM)).concat([0])))}
+      else if(type===3){
+        var tl=(body[0]<<8)|body[1],topic="",i;
+        for(i=0;i<tl;i++)topic+=String.fromCharCode(body[2+i]);
+        var rest=body.subarray(2+tl),msg="";
+        try{ msg=new TextDecoder("utf-8").decode(rest) }
+        catch(e1){ try{ msg=decodeURIComponent(escape(String.fromCharCode.apply(null,rest))) }catch(e2){ for(i=0;i<rest.length;i++)msg+=String.fromCharCode(rest[i]) } }
+        onMsg(topic,msg);
+      }
+    };
+    ws.onclose=function(){onState(false)};
+    ws.onerror=function(){onState(false)};
+  };
+  this.publish=function(topic,msg){
+    var bytes;
+    try{ bytes=Array.prototype.slice.call(new TextEncoder().encode(msg)) }
+    catch(e){ bytes=[]; for(var i=0;i<msg.length;i++){var c=msg.charCodeAt(i); if(c<128)bytes.push(c); else if(c<2048)bytes.push(192|(c>>6),128|(c&63)); else bytes.push(224|(c>>12),128|((c>>6)&63),128|(c&63))} }
+    self.send(frame(3,0,utf8(topic).concat(bytes)));
+  };
+  this.close=function(){try{ws.close()}catch(err){}};
+}
+function stM(){
+  if(syncCli) return;
+  var url=((syncTry%2)===0)?"wss://broker.hivemq.com:8884/mqtt":"wss://broker.emqx.io:8084/mqtt";
+  syncCli=new MiniMqtt(url,"baiyu_"+Math.random().toString(36).slice(2,8),handleMqMsg,function(on){
+    syncOn=on; setSyncDot(on);
+    if(on){ syncTry=0; if(syncTimer){clearTimeout(syncTimer);syncTimer=null} mqRaw({k:"__req",v:1}); }
+    else { syncCli=null; syncTry++; if(!syncTimer) syncTimer=setTimeout(function(){syncTimer=null;stM()},4000); }
+  });
+  syncCli.connect();
+  setTimeout(function(){ if(!syncOn){ try{syncCli&&syncCli.close()}catch(err){} syncCli=null; syncTry++; if(!syncTimer) syncTimer=setTimeout(function(){syncTimer=null;stM()},1500) } },6000);
+}
+function mqRaw(o){
+  if(!syncOn||!syncCli) return;
+  try{ syncCli.publish(ROOM,JSON.stringify(o)) }catch(err){}
+}
+var SYNC_KEYS={love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
+function mergeIn(k,inV){
+  var lo=ls(k),added=0,i;
+  if(Array.isArray(inV)){
+    if(!lo)lo=[];
+    var ids={};
+    for(i=0;i<lo.length;i++){ if(lo[i]&&lo[i].id) ids[lo[i].id]=1 }
+    for(i=0;i<inV.length;i++){ var it=inV[i]; if(it&&it.id&&!ids[it.id]){ lo.push(it); ids[it.id]=1; added++ } }
+    if(added) lws(k,lo);
+  }else if(inV&&typeof inV==="object"){
+    if(!lo)lo={};
+    for(var kk in inV){ if(inV[kk]!=null&&lo[kk]==null){ lo[kk]=inV[kk]; added++ } }
+    if(added) lws(k,lo);
+  }
+  return added;
+}
+function lw(k,v){
+  lws(k,v);
+  if(!SYNC_KEYS[k]) return;
+  if(Array.isArray(v)&&v.length) mqRaw({k:k,v:v[v.length-1],t:"one"});
+  else mqRaw({k:k,v:v,t:"snap"});
+}
+function mkSnap(){
+  for(var k in SYNC_KEYS){ var v=ls(k); if(v) mqRaw({k:k,v:v,t:"snap"}) }
+}
+function handleMqMsg(topic,msg){
+  try{
+    var u=JSON.parse(msg);
+    if(!u||!u.k) return;
+    if(u.k==="__req"){ mkSnap(); return }
+    if(u.k==="game"){ handleGame(u.v); return }
+    if(u.k==="gomoku"||u.k==="xiangqi"){ hGameMsg(u); return }
+    var n=mergeIn(u.k,u.v);
+    if(n){
+      if(CUR==="emotions")renEmo();
+      else if(CUR==="wishes")renWish();
+      else if(CUR==="mail")renMail();
+      else if(CUR==="play")renPlay();
+      else if(CUR==="home"){renHome()}
+      if(CUR!=="home") toast("收到 TA 的更新 💕");
+    }
+  }catch(err){}
+}
 /* ================= 小游戏 ================= */
-function setGameStatus(){var c=mo?"✅ 已连接":"⏳ 连接中";["ttStatus","rpsStatus","goStatus","xqStatus","tapStatus","memStatus"].forEach(function(id){var e=$(id);if(e)e.textContent=c})}
+function setGameStatus(){var c=syncOn?"✅ 已连接":"⏳ 连接中";["ttStatus","rpsStatus","goStatus","xqStatus","tapStatus","memStatus"].forEach(function(id){var e=$(id);if(e)e.textContent=c})}
 /* 井字棋 */
 var TT={b:null,turn:"X",over:null};
 function ttDraw(){if(!TT.b){TT.b=[null,null,null,null,null,null,null,null,null]}$("ttBoard").innerHTML=TT.b.map(function(v,i){return '<button class="cell" style="font-size:26px" onclick="ttMove('+i+')">'+(v||"")+"</button>"}).join("");$("ttTurn").textContent=TT.over?(TT.over==="T"?"🤝 平局":(TT.over==="X"?"✕ 赢啦！":"○ 赢啦！")):("轮到 "+(TT.turn==="X"?"✕":"○"))}
@@ -398,6 +538,15 @@ function memFlip(i){if(MEM.lock||MEM.done||MEM.match[i]||MEM.flip.indexOf(i)>=0)
 function memReset(nb){MEM={cards:memBuild(),flip:[],match:[],lock:false,done:false,start:0,ta:null,iv:null};clearInterval(MEM.iv);$("memTime").textContent="0.0";$("memTaTime").textContent="—";$("memInfo").textContent="两人同一副牌，看谁先翻完";memDraw();if(!nb)mqRaw({k:"game",v:{game:"mem-reset"}})}
 /* 游戏消息处理 */
 function handleGame(v){if(!v)return;if(v.game==="tt"){TT.b=v.b;TT.turn=v.turn;TT.over=v.over;ttDraw()}else if(v.game==="tt-reset"){TT={b:[null,null,null,null,null,null,null,null,null],turn:"X",over:null};ttDraw()}else if(v.game==="rps"){if(v.dev!==myDev()){RPS[v.dev]=v.c;rpsDraw()}}else if(v.game==="rps-reset"){RPS={};rpsDraw()}else if(v.game==="tap"){if(v.type==="win"){if(v.dev!==myDev()){TAP.ta=10;TAP.done=true}tapDraw()}else if(v.dev!==myDev()){TAP.ta=v.n;tapDraw()}}else if(v.game==="tap-reset"){TAP={me:0,ta:0,done:false};tapDraw()}else if(v.game==="mem-done"){if(v.dev!==myDev()){MEM.ta=v.t;$("memTaTime").textContent=v.t+" 秒";$("memInfo").textContent="💔 TA 先翻完了，用了 "+v.t+" 秒";toast("TA 翻完啦！")}}else if(v.game==="mem-reset"){memReset(true)}}function hGameMsg(u){if(!u)return;if(u.k==="gomoku"){if(u.v.type==="m"){GO.b=u.v.b;GO.turn=u.v.turn;GO.over=u.v.over}else{GO={b:goFresh(),turn:"B",over:null}}goDraw()}else if(u.k==="xiangqi"){if(u.v.type==="m"){X.bd=u.v.bd;X.turn=u.v.turn;X.over=u.v.over;X.sel=-1}else{X={bd:XQ.fresh(),turn:1,over:0,sel:-1}}xqDraw()}}
+var GWINS=["tt","rps","go","xq","tap","mem"];
+function openGame(id){
+  GWINS.forEach(function(g){var el=$("gw-"+g);if(el)el.classList.remove("on")});
+  var w=$("gw-"+id); if(w)w.classList.add("on");
+  if(id==="tt")ttDraw(); if(id==="rps")rpsDraw(); if(id==="go")goDraw();
+  if(id==="xq")xqDraw(); if(id==="tap")tapDraw(); if(id==="mem")memDraw();
+  setGameStatus();
+}
+function closeGame(){GWINS.forEach(function(g){var el=$("gw-"+g);if(el)el.classList.remove("on")})}
 function renGames(){ttDraw();rpsDraw();goDraw();xqDraw();tapDraw();memDraw();setGameStatus()}
 function myDev(){try{var d=sessionStorage.getItem("baiyu_dev");if(d)return d;d=Date.now().toString(36)+Math.random().toString(36).slice(2,6);sessionStorage.setItem("baiyu_dev",d);return d}catch(e){return "x"}}
 /* ================= 备份 & 链接同步 ================= */
