@@ -11,14 +11,13 @@ input,textarea,select,button{font:inherit;outline:none;color:var(--ink);backgrou
 button{cursor:pointer}
 img{display:block;max-width:100%}
 ::selection{background:var(--ac);color:var(--p)}
-@keyframes in{from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:none}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes beat{0%,100%{transform:scale(1)}
 25%{transform:scale(1.14)}
 40%{transform:scale(.96)}
-60%{transform:scale(1.08)}
+60%{transform:scale(1.08)}}
 @keyframes float{0%,100%{transform:translateY(0)}
-50%{transform:translateY(-6px)}
+50%{transform:translateY(-6px)}}
 .particles span{position:fixed;bottom:-20px;animation:in 0s;pointer-events:none;z-index:0;font-size:14px}
 body.pf *{animation:none!important;transition:none!important}
 #app{max-width:520px;margin:0 auto;min-height:100dvh;position:relative;z-index:1;padding-bottom:120px}
@@ -121,7 +120,7 @@ body.pf *{animation:none!important;transition:none!important}
 .mem-card.flip{background:var(--c2)}
 .mem-card.match{opacity:.25;pointer-events:none}
 .bnav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:60;width:calc(100% - 28px);max-width:492px;display:flex;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));border-radius:26px;border:1px solid rgba(255,255,255,.45);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.08));backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);box-shadow:0 12px 44px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.65)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.bnav{background:rgba(255,255,255,.9)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.bnav{background:rgba(255,255,255,.9)}}
 [data-theme="dark"] .bnav{background:linear-gradient(135deg,rgba(42,42,54,.55),rgba(30,30,40,.4));border-color:rgba(255,255,255,.14)}
 [data-theme="dark"] .bnav a{color:#c8c0c6}
 .bnav a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--mu);padding:6px 12px;border-radius:16px;text-decoration:none}
@@ -135,7 +134,7 @@ body.pf *{animation:none!important;transition:none!important}
 .toast{position:fixed;left:50%;top:74px;transform:translate(-50%,-8px);z-index:400;max-width:82vw;background:#ffffff;color:#3b2b33;font-size:13px;font-weight:700;padding:12px 18px;border-radius:16px;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 28px rgba(0,0,0,.16);display:none;pointer-events:none;text-align:center;line-height:1.5}
 .toast.show{display:block;animation:toastIn .22s ease}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-8px)}
-to{opacity:1;transform:translate(-50%,0)}
+to{opacity:1;transform:translate(-50%,0)}}
 [data-theme="dark"] .toast{background:#2f2f3c;color:#eeeeee;border-color:rgba(255,255,255,.1)}
 .mubtn{position:fixed;right:16px;bottom:112px;z-index:55;width:44px;height:44px;border-radius:50%;background:var(--c2);box-shadow:0 4px 16px rgba(0,0,0,.1);font-size:18px;display:flex;align-items:center;justify-content:center}
 .modal{position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.38);display:none;align-items:center;justify-content:center;padding:20px}
@@ -171,8 +170,8 @@ to{opacity:1;transform:translate(-50%,0)}
 .sp-bar{width:110px;height:3px;border-radius:99px;background:rgba(212,74,106,.16);margin:20px auto 0;overflow:hidden}
 .sp-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e8879e,#d44a6a);border-radius:99px;animation:spLoad 1.75s ease forwards}
 .sp-skip{position:absolute;right:16px;bottom:34px;font-size:12px;font-weight:700;color:#7d6570;background:rgba(255,255,255,.72);padding:8px 18px;border-radius:99px;border:1px solid rgba(0,0,0,.05);backdrop-filter:blur(8px)}
-@keyframes spUp{from{opacity:0;transform:translateY(16px)}
-@keyframes spLoad{to{width:100%}
+@keyframes spUp{from{opacity:0;transform:translateY(16px)}}
+@keyframes spLoad{to{width:100%}}
 #photoView{position:fixed;inset:0;z-index:880;background:rgba(12,8,10,.96);display:none;align-items:center;justify-content:center;flex-direction:column}
 #photoView.on{display:flex}
 #photoView img{max-width:94vw;max-height:78vh;border-radius:14px;object-fit:contain}
@@ -295,7 +294,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-01-4";
+var APP_VER="2026-11-02-1";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
