@@ -218,7 +218,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <!-- 首页 -->
 <section class="view on" id="v-home">
 <div class="hero"><div class="avs"><span id="meAv">🦁</span><span class="bt">💖</span><span id="herAv">🐰</span></div><h1>方方 & 欣欣</h1><div class="tag" id="heroNick"></div><div class="badge" id="homeBadge"></div><div class="timer" id="loveTimer"></div><div class="st4"><div class="st"><b id="sMeet">0</b><span>认识</span></div><div class="st"><b id="sLove">0</b><span>在一起</span></div><div class="st"><b id="sBirth">-</b><span>TA生日</span></div><div class="st"><b id="sAnniv">-</b><span>纪念日</span></div></div></div>
-<div class="p<div class="today" id="todayCard"><div class="td-num" id="tdNum">0</div><div class="td-lab" id="tdLab">在一起的第几天</div><div class="td-line" id="tdLine"></div><button class="poke" onclick="poke()">💗 戳一下 TA</button><div class="poke-n" id="tdPokes"></div></div>g">
+<div class="pg"><div class="today" id="todayCard"><div class="td-num" id="tdNum">0</div><div class="td-lab" id="tdLab">在一起的第几天</div><div class="td-line" id="tdLine"></div><button class="poke" onclick="poke()">💗 戳一下 TA</button><div class="poke-n" id="tdPokes"></div></div>
 <div class="card"><div class="hd"><h3>💌 今日情话</h3><button class="gh" onclick="nextQuote()">换一句</button></div><div id="todayQuote" style="line-height:1.8;font-size:14px"></div></div>
 <div class="card click" onclick="nav('weather')"><div class="hd"><h3>🌤 天气</h3></div><div id="miniWX"></div></div>
 <div class="card click" onclick="nav('achievements')"><div class="hd"><h3>🏆 成就</h3></div><div class="ach-strip" id="achMini"></div></div>
@@ -294,7 +294,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-02-2";
+var APP_VER="2026-11-02-3";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
