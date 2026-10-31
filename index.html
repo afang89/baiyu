@@ -261,7 +261,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <section class="view" id="v-weather"><div class="topbar" style="position:static"><h2>🌤 天气</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><h3 style="font-size:15px;color:var(--p)">📍 南京 · 江宁</h3><div style="font-size:11px;color:var(--mu)">家乡：河南安阳</div><div id="wMeBody"></div></div><div class="card"><h3 style="font-size:15px;color:var(--p)">📍 达州 · 渠县</h3><div style="font-size:11px;color:var(--mu)">家乡：渠县</div><div id="wHerBody"></div></div></div></section>
 
 <!-- 成就 -->
-<section class="view" id="v-achievements"><div class="topbar" style="position:static"><h2>🏆 成就</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>徽章</h3><span id="achUnlocked" style="font-size:14px;font-weight:800;color:var(--p)"></span></div><div class="ach-grid" id="achGrid"></div></div></div></section>
+<section class="view" id="v-achievements"><div class="topbar" style="position:static"><h2>🏆 成就</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>徽章</h3><span id="achUnlocked" style="font-size:14px;font-weight:800;color:var(--p)"></span></div><div id="achFilterBar" style="display:flex;gap:8px;margin-bottom:12px"></div><div id="achGrid"></div></div></div></section>
 
 <!-- 一起玩 -->
 <section class="view" id="v-games"><div class="topbar" style="position:static"><h2>🎮 一起玩</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="gicon-grid">
@@ -295,7 +295,7 @@ function hideSplash(){var s=document.getElementById("splash");if(!s||s.classList
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-01-3";
+var APP_VER="2026-11-01-4";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -376,7 +376,7 @@ function showVer(){
     document.body.appendChild(box);
   }
 }
-function setTheme(t){document.body.setAttribute("data-theme",t);US.theme=t;svUS()}
+function setTheme(t){document.body.setAttribute("data-theme",t);US.theme=t;var a=US.themesTried||[];if(a.indexOf(t)<0){a.push(t);US.themesTried=a}svUS()}
 /* ================= 计时 ================= */
 function startTimeSet(){var el=$("loveTimer");if(!el)return;function tick(){var d=Date.now()-pD(CONFIG.startDate).getTime(),p=Math.abs(d),dd=Math.floor(p/86400000),h=Math.floor(p%86400000/3600000),m=Math.floor(p%3600000/60000),s=Math.floor(p%60000/1000);el.textContent=d<0?"距离在一起还有 "+dd+" 天":"💞 在一起 "+dd+" 天 "+h+":"+pad(m)+":"+pad(s)}tick();setInterval(tick,1000)}
 /* ================= 日期工具 ================= */
@@ -413,6 +413,7 @@ function myName(){return US.who==="ta"?CONFIG.her.nickname:CONFIG.me.nickname}
 function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
 function heartPop(){var h=document.createElement("div");h.className="poke-heart";h.textContent="💗";document.body.appendChild(h);setTimeout(function(){try{h.remove()}catch(e){}},700)}
 function pokeCount(){var d=ls("love_pokes_v1")||{};return d[ts()]||0}
+function fxPlus(k){var f=ls("love_fx_v1")||{};f[k]=(f[k]||0)+1;lws("love_fx_v1",f)}
 var pokeStreak=0,pokeTimer=null;
 function showHug(){
   try{
@@ -445,8 +446,8 @@ function poke(){
   pokeTimer=setTimeout(function(){pokeStreak=0},1500);
   var d=ls("love_pokes_v1")||{}; d[ts()]=(d[ts()]||0)+1; lws("love_pokes_v1",d);
   renToday();
-  if(pokeStreak>=10){ heartRain(); buzz(50); mqRaw({k:"__rain",v:{from:myName()}}); toast("送 TA 一场爱心雨 ❤️"); pokeStreak=0; }
-  else if(pokeStreak===3){ showHug(); buzz(40); mqRaw({k:"__hug",v:{from:myName()}}); toast("抱抱 🫂"); }
+  if(pokeStreak>=10){ heartRain(); buzz(50); fxPlus("rain"); mqRaw({k:"__rain",v:{from:myName()}}); toast("送 TA 一场爱心雨 ❤️"); pokeStreak=0; }
+  else if(pokeStreak===3){ showHug(); buzz(40); fxPlus("hug"); mqRaw({k:"__hug",v:{from:myName()}}); toast("抱抱 🫂"); }
   else { mqRaw({k:"__poke",v:{from:myName(),ts:Date.now()}}); toast("已戳 TA 一下 💗"); }
 }
 function renToday(){
@@ -458,41 +459,113 @@ function renToday(){
   $("tdPokes").textContent="今天被戳 "+pokeCount()+" 次";
 }
 function pts(){var ck=ls("love_checkin_v1")||{},ms=ls("love_messages_v1")||[],em=ls("love_emotions_v1")||[],ws=ls("love_wishes_v1")||[],ch=ls("love_chats_v1")||[],fp=ls("love_footprints_v1")||[],lt=ls("love_letters_v1")||[],ph=ls("love_photos_v1")||[];return Object.keys(ck).length*20+ms.length*5+em.length*5+ws.filter(function(w){return w.done}).length*10+ch.length*3+fp.length*8+lt.length*8+ph.length*6}
-var ACH=[
-{ico:"💌",nm:"第一封信",desc:"在「信箱 · 留言」里写下第 1 条留言",ok:function(){return(ls("love_messages_v1")||[]).length>=1}},
-{ico:"🎁",nm:"情绪初体验",desc:"在「情绪盒子」放进第 1 条情绪",ok:function(){return(ls("love_emotions_v1")||[]).length>=1}},
-{ico:"✅",nm:"第一个心愿",desc:"在「心愿清单」加入第 1 个心愿",ok:function(){return(ls("love_wishes_v1")||[]).length>=1}},
-{ico:"💬",nm:"第一次聊天",desc:"在「信箱 · 聊天墙」保存第 1 条记录",ok:function(){return(ls("love_chats_v1")||[]).length>=1}},
-{ico:"🔥",nm:"坚持 7 天",desc:"在「互动 · 打卡」累计说 7 天早安/晚安",ok:function(){return Object.keys(ls("love_checkin_v1")||{}).length>=7}},
-{ico:"🌟",nm:"圆梦达人",desc:"把 3 个心愿打勾完成",ok:function(){return(ls("love_wishes_v1")||[]).filter(function(x){return x.done}).length>=3}},
-{ico:"✉️",nm:"寄信能手",desc:"安排 3 封定时信",ok:function(){return(ls("love_letters_v1")||[]).length>=3}},
-{ico:"🗺",nm:"旅行家",desc:"在「互动 · 足迹」记录 5 个地方",ok:function(){return(ls("love_footprints_v1")||[]).length>=5}},
-{ico:"🎭",nm:"情绪丰富",desc:"用过 4 种不同的情绪标签",ok:function(){var m={};(ls("love_emotions_v1")||[]).forEach(function(x){m[x.mood]=true});return Object.keys(m).length>=4}},
-{ico:"💎",nm:"积分破百",desc:"各项互动累计积分达到 100",ok:function(){return pts()>=100}},
-{ico:"💯",nm:"百天纪念",desc:"在一起满 100 天（自动获得）",ok:function(){return dD(pD(CONFIG.startDate),t0())>=100}},
-{ico:"📸",nm:"相册达人",desc:"在相册里存满 5 张照片",ok:function(){return(ls("love_photos_v1")||[]).length>=5}},
-{ico:"📝",nm:"七日问答",desc:"连续回答 7 天「每日一问」",ok:function(){return Object.keys(ls("love_daily_v1")||{}).length>=7}},
-{ico:"💗",nm:"情书十封",desc:"留言板累计 10 条留言",ok:function(){return(ls("love_messages_v1")||[]).length>=10}},
-{ico:"🎨",nm:"个性头像",desc:"在「我们 · ✏️」换一次头像或上传照片",ok:function(){return !!(US.meEmoji||US.herEmoji||US.meImg||US.herImg)}},
-{ico:"💖",nm:"两百天",desc:"在一起满 200 天（自动获得）",ok:function(){return dD(pD(CONFIG.startDate),t0())>=200}}
-];
-function unlockedCount(){return ACH.filter(function(a){return a.ok()}).length}
+/* ===== 成就系统（统计缓存 + 400+ 成就 + 分页） ===== */
+var ACH=[];
+function A(ico,nm,desc,key,need){ACH.push({ico:ico,nm:nm,d:desc,k:key,n:need})}
+var T1=[1,2,3,4,5,6,8,10,12,15,20,25,30,40,50,60,80,100,150,200,300,500,800,1000,1500,2000];
+[["msgs","💌","留言"],["emos","🎁","情绪"],["wishes","✅","心愿"],["wishDone","🌟","圆梦"],
+ ["chats","💬","聊天"],["checkins","🔥","打卡"],["feet","🗺","足迹"],["photos","📸","照片"],
+ ["daily","📝","问答"],["letters","✉️","定时信"],["points","💎","积分"],["pokes","💗","被戳"],
+ ["hugs","🫂","抱抱"],["rains","❤️","爱心雨"]].forEach(function(c){
+  T1.forEach(function(n){A(c[1],"「"+c[2]+"」"+n,"累计「"+c[2]+"」达到 "+n+" 时自动获得",c[0],n)});
+});
+[7,14,30,60,90,100,150,200,250,300,365,400,500,520,600,730,800,999,1000,1100,1314,1500,2000,2500,3000,3650].forEach(function(n){
+  A("📅","相伴 "+n+" 天","在一起满 "+n+" 天自动获得","days",n);
+});
+[["firstMsg","💌","第一封信","写下第 1 条留言","msgs",1],
+ ["firstEmo","🎁","情绪初体验","放进第 1 条情绪","emos",1],
+ ["firstWish","✅","第一个心愿","加入第 1 个心愿","wishes",1],
+ ["firstChat","💬","第一次聊天","聊天墙第 1 条","chats",1],
+ ["firstCheck","🌅","第一次打卡","说一次早安或晚安","checkins",1],
+ ["firstFoot","📍","第一个足迹","记录 1 个地方","feet",1],
+ ["firstPhoto","📷","第一张照片","相册上传 1 张","photos",1],
+ ["firstDaily","📝","第一次问答","回答 1 次每日一问","daily",1],
+ ["firstLetter","✉️","第一封定时信","安排 1 封信","letters",1],
+ ["avatar","🎨","个性头像","换一次头像或上传照片","avatar",1],
+ ["theme","🌈","换换心情","用过 2 种以上主题","themes",2],
+ ["who","🪪","认领身份","在「我们」里设置我是谁","who",1],
+ ["hug1","🫂","第一次抱抱","连戳 3 下触发抱抱","hugs",1],
+ ["rain1","❤️","第一场爱心雨","连戳 10 下触发爱心雨","rains",1],
+ ["backup","📦","备份意识","导出过 1 次备份","backup",1],
+ ["p100","💯","百分恋人","积分达到 100","points",100],
+ ["p500","🏅","积分 500","积分达到 500","points",500],
+ ["p1000","👑","积分 1000","积分达到 1000","points",1000]
+].forEach(function(x){A(x[1],x[2],x[3],x[4],x[5])});
+
+var ST={};
+function loadStats(){
+  function ca(k){return (ls(k)||[]).length}
+  function co(k){return Object.keys(ls(k)||{}).length}
+  var fx=ls("love_fx_v1")||{}, pk=ls("love_pokes_v1")||{}, pt=0;
+  for(var d in pk){ if(pk[d]) pt+=pk[d] }
+  ST.days=Math.abs(dD(pD(CONFIG.startDate),t0()));
+  ST.msgs=ca("love_messages_v1"); ST.emos=ca("love_emotions_v1");
+  ST.wishes=ca("love_wishes_v1");
+  ST.wishDone=(ls("love_wishes_v1")||[]).filter(function(w){return w.done}).length;
+  ST.chats=ca("love_chats_v1"); ST.checkins=co("love_checkin_v1");
+  ST.feet=ca("love_footprints_v1"); ST.photos=ca("love_photos_v1");
+  ST.daily=co("love_daily_v1"); ST.letters=ca("love_letters_v1");
+  ST.points=pts(); ST.pokes=pt;
+  ST.hugs=fx.hug||0; ST.rains=fx.rain||0;
+  ST.avatar=(US.meImg||US.herImg||US.meEmoji||US.herEmoji)?1:0;
+  ST.themes=(US.themesTried||[]).length;
+  ST.who=US.who?1:0;
+  ST.backup=US.backedUp?1:0;
+}
+function achOn(a){ var v=ST[a.k]; return (typeof v==="number"?v:0)>=a.n }
+function unlockedCount(){ loadStats(); var c=0; ACH.forEach(function(a){ if(achOn(a))c++ }); return c }
+var achFilter="all", achPage=0, ACH_PAGE=60;
 function renAchMini(){
-  var b=$("achMini");if(!b)return;
+  var b=$("achMini"); if(!b)return;
+  loadStats();
   b.style.cssText="display:grid;grid-template-columns:repeat(3,1fr);gap:10px";
-  var got=ACH.filter(function(a){return a.ok()});
-  var rest=ACH.filter(function(a){return !a.ok()});
-  var show=got.concat(rest).slice(0,6);
-  b.innerHTML=show.map(function(a){var on=a.ok();
-    return '<div style="text-align:center;padding:10px 4px;border-radius:14px;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.45;filter:grayscale(1)')+'"><div style="font-size:24px;line-height:1">'+a.ico+'</div><div style="font-size:10px;font-weight:700;color:var(--p);margin-top:5px">'+a.nm+'</div></div>'}).join("");
+  var got=ACH.filter(achOn), rest=ACH.filter(function(a){return !achOn(a)});
+  b.innerHTML=got.concat(rest).slice(0,6).map(function(a){var on=achOn(a);
+    return '<div style="text-align:center;padding:10px 4px;border-radius:14px;background:'+(on?'var(--ac)':'var(--c1)')+';'+(on?'':'opacity:.45;filter:grayscale(1)')+'" onclick="nav(\'achievements\')"><div style="font-size:24px;line-height:1">'+a.ico+'</div><div style="font-size:10px;font-weight:700;color:var(--p);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+a.nm+'</div></div>'}).join("");
+}
+function achList(){
+  loadStats();
+  var arr=ACH;
+  if(achFilter==="got")arr=ACH.filter(achOn);
+  if(achFilter==="no")arr=ACH.filter(function(a){return !achOn(a)});
+  return arr;
 }
 function renAch(){
-  $("achUnlocked").textContent=unlockedCount()+"/"+ACH.length;
+  loadStats();
+  var total=ACH.length, got=0; ACH.forEach(function(a){if(achOn(a))got++});
+  $("achUnlocked").textContent=got+"/"+total;
+  var arr=achList(), show=arr.slice(0,(achPage+1)*ACH_PAGE);
   var g=$("achGrid");
-  g.style.cssText="display:grid;grid-template-columns:1fr;gap:10px";
-  var sorted=ACH.slice().sort(function(a,b){return (b.ok()?1:0)-(a.ok()?1:0)});
-  g.innerHTML=sorted.map(function(a){var on=a.ok();
-    return '<div class="ach2'+(on?'':' lock')+'"><div class="ai">'+a.ico+'</div><div style="flex:1"><div class="an">'+a.nm+'</div><div class="ad">'+a.desc+'</div><span class="at '+(on?'on':'off')+'">'+(on?'✓ 已获得':'未获得')+'</span></div></div>'}).join("");
+  g.style.cssText="display:grid;grid-template-columns:repeat(4,1fr);gap:8px";
+  var html2=show.map(function(a,i){var on=achOn(a);
+    return '<div onclick="achInfo('+ACH.indexOf(a)+')" style="text-align:center;padding:9px 3px;border-radius:14px;background:var(--c1);'+(on?'':'opacity:.38;filter:grayscale(1)')+'"><div style="font-size:21px;line-height:1.1">'+a.ico+'</div><div style="font-size:9px;color:var(--mu);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+a.nm+'</div></div>'}).join("");
+  if(show.length<arr.length)html2+='<div onclick="achMore()" style="grid-column:1/-1;text-align:center;padding:12px;border-radius:14px;background:var(--ac);color:var(--p);font-weight:800;font-size:13px">加载更多（还有 '+(arr.length-show.length)+' 个）</div>';
+  g.innerHTML=html2;
+  var f=$("achFilterBar");
+  if(f)f.innerHTML=[["all","全部"],["got","已获得"],["no","未获得"]].map(function(x){
+    return '<span onclick="achSetFilter(\''+x[0]+'\')" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:700;'+(achFilter===x[0]?'color:#fff;background:linear-gradient(135deg,var(--p2),var(--p))':'color:var(--mu);background:var(--c1)')+'">'+x[1]+'</span>'}).join("");
+}
+function achSetFilter(f){ achFilter=f; achPage=0; renAch() }
+function achMore(){ achPage++; renAch() }
+function achInfo(i){
+  var a=ACH[i]; if(!a)return;
+  loadStats();
+  var on=achOn(a), cur=ST[a.k];
+  var box=document.getElementById("achPop");
+  if(!box){
+    box=document.createElement("div"); box.id="achPop";
+    box.style.cssText="position:fixed;inset:0;z-index:440;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:24px";
+    box.onclick=function(){box.remove()};
+    document.body.appendChild(box);
+  }
+  var inner=document.createElement("div");
+  inner.style.cssText="background:var(--c2);border-radius:22px;padding:24px;max-width:320px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.28)";
+  inner.onclick=function(e){e.stopPropagation()};
+  inner.innerHTML='<div style="font-size:52px;line-height:1">'+a.ico+'</div>'+
+    '<div style="font-size:17px;font-weight:800;color:var(--p);margin-top:10px">'+a.nm+'</div>'+
+    '<div style="font-size:13px;color:var(--ink);line-height:1.8;margin-top:12px">'+a.d+'</div>'+
+    '<div style="font-size:12px;margin-top:14px;color:'+(on?'#2e9e57':'var(--mu)')+';font-weight:800">'+(on?'✓ 已获得':'未获得'+(typeof cur==="number"?'· 当前 '+(cur)+' / '+a.n:''))+'</div>';
+  box.innerHTML=""; box.appendChild(inner);
 }
 /* ================= 纪念日 ================= */
 function mileInfo(){var d=dateInfo(),m=null;for(var i=0;i<CONFIG.milestones.length;i++)if(CONFIG.milestones[i]>d.loveDays){m=CONFIG.milestones[i];break}if(!m)return{l:"全部达成!",p:100};return{l:m-d.loveDays,p:Math.min(100,Math.round(d.loveDays/m*100))}}
@@ -738,7 +811,7 @@ function myDev(){try{var d=sessionStorage.getItem("baiyu_dev");if(d)return d;d=D
 /* ================= 备份 & 链接同步 ================= */
 var ALL_KEYS=["love_messages_v1","love_emotions_v1","love_wishes_v1","love_letters_v1","love_chats_v1","love_photos_v1","love_footprints_v1","love_daily_v1","love_checkin_v1","love_spin_v1",SK];
 function snapshot(){var d={site:"白榆",t:new Date().toISOString(),d:{}};ALL_KEYS.forEach(function(k){var v=ls(k);if(v!=null)d.d[k]=v});return d}
-function exportBackup(){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"}));a.download="baiyu-"+ts()+".json";a.click();toast("已导出 📦")}
+function exportBackup(){US.backedUp=1;svUS();var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"}));a.download="baiyu-"+ts()+".json";a.click();toast("已导出 📦")}
 function importBackup(){var i=document.createElement("input");i.type="file";i.accept=".json,application/json";i.onchange=function(){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(!d||!d.d)throw 0;var ks=Object.keys(d.d),c=0;ks.forEach(function(k){var inV=d.d[k];if(inV==null)return;if(k===SK){var cur=ls(SK)||{};for(var kk in inV){if(inV[kk]!=null&&cur[kk]==null)cur[kk]=inV[kk]}lws(SK,cur);return}var lo=ls(k);if(k==="love_daily_v1"||k==="love_checkin_v1"||k==="love_spin_v1"){if(!lo)lo={};if(typeof inV==="object"&&!Array.isArray(inV)){for(var k2 in inV){if(inV[k2]&&!lo[k2]){lo[k2]=inV[k2];c++}}}}else if(Array.isArray(inV)){if(!lo)lo=[];var ids={};lo.forEach(function(x){if(x.id)ids[x.id]=true});inV.forEach(function(row){if(row&&row.id&&!ids[row.id]){lo.push(row);ids[row.id]=true;c++}else if(row&&!row.id){lo.push(row);c++}})}lws(k,lo)});US=ls(SK)||US;apS();renHome();if(CUR!=="home")nav(CUR);toast("已导入 "+c+" 条数据 💕")}catch(e){toast("文件格式不对")}};r.readAsText(f)};i.click()}
 function syncLink(){var s2=JSON.stringify(snapshot());var en=btoa(unescape(encodeURIComponent(s2)));copyText(location.origin+location.pathname+"#im="+en);toast("链接已复制 📋，发给 TA")}
 function checkImportHash(){var h=location.hash;if(!h||h.indexOf("#im=")!==0)return;try{var en=h.replace("#im=",""),st=decodeURIComponent(escape(atob(en))),d=JSON.parse(st);if(!d||!d.d)return;var ks=Object.keys(d.d),c=0;ks.forEach(function(k){var inV=d.d[k];if(inV==null||k===SK)return;var lo=ls(k);if(k==="love_daily_v1"||k==="love_checkin_v1"||k==="love_spin_v1"){if(!lo)lo={};if(typeof inV==="object"&&!Array.isArray(inV)){for(var kk in inV){if(inV[kk]&&!lo[kk]){lo[kk]=inV[kk];c++}}}}else if(Array.isArray(inV)){if(!lo)lo=[];var ids={};lo.forEach(function(x){if(x.id)ids[x.id]=true});inV.forEach(function(r){if(r&&r.id&&!ids[r.id]){lo.push(r);ids[r.id]=true;c++}})}lws(k,lo)});location.hash="";toast("从 TA 导入 "+c+" 条 💕")}catch(e){location.hash=""}}
