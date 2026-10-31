@@ -204,6 +204,7 @@ to{opacity:1;transform:translate(-50%,0)}}
 body.inapp .mubtn{display:none}
 
 #lock{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fdf7f9 0%,#f7e9ee 100%);overflow:hidden;opacity:1;filter:none}
+#lock.off{display:none!important}
 #lock .bx{width:min(86vw,340px);background:#fff;border-radius:26px;padding:30px 24px 26px;box-shadow:0 20px 50px rgba(180,80,100,.14);text-align:center}
 #lock .av{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#ef7d9b,#d44a6a);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px}
 #lock h2{font-size:26px;color:#d44a6a;letter-spacing:6px;font-weight:900}
@@ -308,7 +309,7 @@ body.inapp .mubtn{display:none}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-02-7";
+var APP_VER="2026-11-02-8";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -835,6 +836,16 @@ document.addEventListener("click",function(e){var el=e.target;while(el&&el!==doc
 new MutationObserver(function(){document.querySelectorAll('[id^="sb__"],div[class*="watermark"],div[class*="csb"],div[class*="sandbox"]').forEach(function(n2){if(n2!==document.body)n2.remove()})}).observe(document.documentElement,{childList:true,subtree:true});
 /* ================= 初始化 ================= */
 var CUR="home";
+
+/* ===== 从原版恢复的启动函数 ===== */
+function checkLock(){var on=US.lockEnabled!==false;var u=false;try{u=sessionStorage.getItem("baiyu_unlocked")==="yes"}catch(e){}if(!on||u)$("lock").classList.add("off")}
+function unlock(){var p=String(US.lockPassword||"211");if($("lockIn").value===p){try{sessionStorage.setItem("baiyu_unlocked","yes")}catch(e){}$("lock").classList.add("off");toast("欢迎回家 🌿")}else{toast("暗号不对 💭");$("lockIn").value="";$("lockIn").focus()}}
+function initMusic(){var a=$("bgm");a.src=US.musicUrl||MUSIC_URL;if(US.musicAutoplay){var p=a.play();if(p&&p.catch)p.catch(function(){})}}
+function countUp(el,n,post){if(!el)return;post=post||"";if(document.body.classList.contains("pf")){el.textContent=n+post;return}var st=0,t1=null,dur=420;function step(ts2){if(!t1)t1=ts2;var p=Math.min(1,(ts2-t1)/dur);el.textContent=Math.round(st+(n-st)*p)+post;if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+function step(ts2){if(!t1)t1=ts2;var p=Math.min(1,(ts2-t1)/dur);el.textContent=Math.round(st+(n-st)*p)+post;if(p<1)requestAnimationFrame(step)}
+function copyText(s){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).catch(function(){});return}var a=document.createElement("textarea");a.value=s;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}
+document.addEventListener("keydown",function(e){var l=$("lock");if(e.key==="Enter"&&l&&!l.classList.contains("off"))unlock()});
+
 function init(){
   try{ if(/\bwv\b|; wv\)/.test(navigator.userAgent||"")) document.body.classList.add("inapp") }catch(e){}checkLock();checkImportHash();initMusic();startTimeSet();bindPhotoInput();$("themeSel").value=US.theme||"pink";renHome();stM();setTimeout(checkUpdate,2500)}
 window.__back=function(){
