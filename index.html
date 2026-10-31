@@ -185,13 +185,13 @@ to{opacity:1;transform:translate(-50%,0)}}
 .ach2 .at{font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;display:inline-block;margin-top:5px}
 .ach2 .at.on{background:#e7f7ec;color:#2e9e57}
 .ach2 .at.off{background:var(--c1);color:var(--mu)}
-.today{background:linear-gradient(160deg,var(--c2),var(--ac));border-radius:24px;padding:22px 18px;box-shadow:var(--sh);text-align:center;margin-bottom:14px}
-.today .td-num{font-size:52px;font-weight:900;color:var(--p);line-height:1.05}
-.today .td-lab{font-size:12px;color:var(--mu);margin-top:6px;letter-spacing:1px}
-.today .td-line{font-size:13px;color:#6d5c66;line-height:1.9;margin:16px 4px}
-.poke{display:inline-flex;align-items:center;gap:8px;padding:13px 32px;border-radius:99px;background:linear-gradient(135deg,var(--p2),var(--p));color:#fff;font-weight:800;font-size:15px;box-shadow:0 8px 22px rgba(212,74,106,.32);transition:transform .12s}
+.today{background:linear-gradient(160deg,var(--c2),var(--ac));border-radius:20px;padding:16px 16px 14px;box-shadow:var(--sh);text-align:center;margin-bottom:12px}
+.today .td-num{font-size:34px;font-weight:900;color:var(--p);line-height:1.1}
+.today .td-lab{font-size:11px;color:var(--mu);margin-top:4px;letter-spacing:1px}
+.today .td-line{font-size:12px;color:#6d5c66;line-height:1.7;margin:10px 6px}
+.poke{display:inline-flex;align-items:center;gap:6px;padding:9px 22px;border-radius:99px;background:linear-gradient(135deg,var(--p2),var(--p));color:#fff;font-weight:800;font-size:13px;box-shadow:0 6px 16px rgba(212,74,106,.28);transition:transform .12s}
 .poke:active{transform:scale(.93)}
-.poke-n{margin-top:10px;font-size:11px;color:var(--mu)}
+.poke-n{margin-top:7px;font-size:10px;color:var(--mu)}
 .poke-heart{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);font-size:66px;z-index:500;pointer-events:none;animation:pkPop .65s ease forwards}
 @keyframes pkPop{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}55%{transform:translate(-50%,-58%) scale(1.18);opacity:1}100%{transform:translate(-50%,-72%) scale(1);opacity:0}}
 
@@ -254,7 +254,7 @@ body.locking{overflow:hidden;height:100dvh}
 <section class="view" id="v-photos"><div class="topbar" style="position:static"><h2>📸 相册</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs" id="photoFilters"><span class="tb on" data-cat="all">全部</span><span class="tb" data-cat="合照">合照</span><span class="tb" data-cat="单人">单人</span><span class="tb" data-cat="旅行">旅行</span><span class="tb" data-cat="日常">日常</span></div><div class="pgrid" id="photoGrid"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="resetPhotos()">清空相册</button></div></div></section>
 
 <!-- 我们 -->
-<section class="view" id="v-us"><div class="topbar" style="position:static"><h2>💕 我们</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs"><span class="tb on" data-us="tags">性格</span><span class="tb" data-us="tl">时间轴</span><span class="tb" data-us="future">未来</span><span class="tb" data-us="edit">✏️</span></div><div class="pan on" id="us-tags"><div class="card"><div class="hd"><h3>🦁 方方</h3></div><div id="meTags"></div></div><div class="card"><div class="hd"><h3>🐰 欣欣</h3></div><div id="herTags"></div></div></div><div class="pan" id="us-tl"><div id="tlList"></div><button class="btn" style="width:100%;margin-top:4px" onclick="tlNew()">＋ 添加新节点</button></div><div class="pan" id="us-future"><div class="pgrid" id="futureList"></div></div><div class="pan" id="us-edit"><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvMe">🦁</div><div><div class="pro-name">方方</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickMe"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('me')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euMeNick"></div><div class="pro-row"><label>标签</label><textarea id="euMeTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euMeCity"></div></div><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvHer">🐰</div><div><div class="pro-name">欣欣</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickHer"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('her')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euHerNick"></div><div class="pro-row"><label>标签</label><textarea id="euHerTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euHerCity"></div></div><div class="pro-card"><div class="pro-row"><label>我是</label><select id="euWho" style="flex:1;border:none;background:transparent;font-size:14px"><option value="me">方方</option><option value="ta">欣欣</option></select></div><div class="pro-row"><label>置顶回忆</label><input id="euMoment"></div><div class="pro-row"><label>暗号</label><input id="euLockPwd"></div><div class="pro-row"><label>音乐</label><input id="euMuUrl" placeholder="mp3 地址"></div><div class="pro-row"><label>收信邮箱</label><input id="euMailTo"></div><div class="pro-row" style="border:none"><label>版本</label><a onclick="showVer()" style="color:var(--p);font-weight:800;font-size:13px">白榆 v2 · 点此查看更新内容</a></div><div class="row" style="margin-top:12px"><button class="btn" onclick="saveUsEdit()">💾 保存</button><button class="gh" onclick="exportBackup()">📦 备份</button><button class="gh" onclick="importBackup()">📥 导入备份</button><button class="gh" onclick="syncLink()">📤 同步链接</button></div></div></div></div></section>
+<section class="view" id="v-us"><div class="topbar" style="position:static"><h2>💕 我们</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs"><span class="tb on" data-us="tags">性格</span><span class="tb" data-us="tl">时间轴</span><span class="tb" data-us="future">未来</span></div><div style="display:flex;gap:10px;margin-bottom:12px"><button class="btn" style="flex:1" onclick="nav('set')">⚙️ 设置与资料</button></div><div class="pan on" id="us-tags"><div class="card"><div class="hd"><h3>🦁 方方</h3></div><div id="meTags"></div></div><div class="card"><div class="hd"><h3>🐰 欣欣</h3></div><div id="herTags"></div></div></div><div class="pan" id="us-tl"><div id="tlList"></div><button class="btn" style="width:100%;margin-top:4px" onclick="tlNew()">＋ 添加新节点</button></div><div class="pan" id="us-future"><div class="pgrid" id="futureList"></div></div></div></section>
 
 <!-- 情绪 -->
 <section class="view" id="v-emotions"><div class="topbar" style="position:static"><h2>🎁 情绪盒子</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card" style="text-align:center;font-size:13px;color:var(--mu)"><b style="color:var(--p)">我们的约定</b><br>不冷战 · 认真接住对方所有情绪</div><div class="card"><select class="inp" id="emotionMood" style="margin-bottom:8px"><option>开心</option><option>想念</option><option>委屈</option><option>烦躁</option><option>其他</option></select><select class="inp" id="emotionAuthor" style="margin-bottom:8px"><option value="方方">方方</option><option value="欣欣">欣欣</option><option value="匿名">匿名</option></select><textarea class="inp" id="emotionText" rows="2" placeholder="此刻的情绪…" style="margin-bottom:8px"></textarea><button class="btn" style="width:100%" onclick="addEmotion()">放进盒子</button></div><div id="emotionList"></div></div></section>
@@ -312,7 +312,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-02-9";
+var APP_VER="2026-11-03-1";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -398,42 +398,43 @@ function distKm(){var R=6371,ra=Math.PI/180,a=CONFIG.me,b=CONFIG.her,dl=(b.lat-a
 function nav(r,fromHist){
   CUR=r;
   if(!fromHist){ closeGame(); }
-  document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
+  document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="set"){fillUsEdit();var pv=$("setPwd");if(pv)pv.value=String(US.lockPassword||"211");var sv=$("setVer");if(sv)sv.textContent=APP_VER;}if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
 /* ================= 头像 ================= */
 var EMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
 function setAv(el,p){if(!el)return;if(p.img){el.style.backgroundImage="url("+p.img+")";el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.textContent=""}else{el.style.backgroundImage="none";el.textContent=p.emoji}}
 function pickAv(who,i){var e=EMO[i];if(who==="me"){meImgSel=null;$("pvMe").style.backgroundImage="none";$("pvMe").textContent=e}else{herImgSel=null;$("pvHer").style.backgroundImage="none";$("pvHer").textContent=e}markAvPick(who,e)}
 function markAvPick(who,e){document.querySelectorAll("#pick"+(who==="me"?"Me":"Her")+" button").forEach(function(x){x.classList.toggle("on",x.textContent===e)})}
-function uploadAvatar(who){var i=document.createElement("input");i.type="file";i.accept="image/*";i.onchange=function(){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var im=new Image();im.onload=function(){var c=document.createElement("canvas");c.width=c.height=160;var ctx=c.getContext("2d");var s=Math.min(im.width,im.height),sx=(im.width-s)/2,sy=(im.height-s)/2;ctx.drawImage(im,sx,sy,s,s,0,0,160,160);var d=c.toDataURL("image/jpeg",.85);if(who==="me"){meImgSel=d}else{herImgSel=d}var el=$(who==="me"?"pvMe":"pvHer");el.style.backgroundImage="url("+d+")";el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.textContent="";toast("已选照片，点保存后生效 💕")};im.src=ev.target.result};r.readAsDataURL(f)};i.click()}
-var meE=null,herE=null,meImgSel=null,herImgSel=null;
-function fillUsEdit(){setAv($("pvMe"),CONFIG.me);setAv($("pvHer"),CONFIG.her);meE=CONFIG.me.emoji;herE=CONFIG.her.emoji;meImgSel=CONFIG.me.img||null;herImgSel=CONFIG.her.img||null;["pickMe","pickHer"].forEach(function(id){var b=$(id),who=id==="pickMe"?"me":"her",cur=who==="me"?CONFIG.me.emoji:CONFIG.her.emoji;b.innerHTML=EMO.map(function(e){return '<button class="'+(e===cur?"on":"")+'" onclick="pickAv(\x27'+who+'\x27,'+EMO.indexOf(e)+')">'+e+"</button>"}).join("")});$("euMeNick").value=CONFIG.me.nickname;$("euHerNick").value=CONFIG.her.nickname;$("euMeTags").value=CONFIG.me.tags.join("，");$("euHerTags").value=CONFIG.her.tags.join("，");$("euMeCity").value=CONFIG.me.city;$("euHerCity").value=CONFIG.her.city;$("euMoment").value=CONFIG.topMoment||"";if($("euWho"))$("euWho").value=US.who||"me";$("euLockPwd").value=US.lockPassword||"211";$("euMuUrl").value=US.musicUrl||MUSIC_URL;$("euMailTo").value=US.mailTo||""}
-function saveUsEdit(){var s=US;s.meNick=$("euMeNick").value.trim()||"方方";s.herNick=$("euHerNick").value.trim()||"欣欣";s.meTags=$("euMeTags").value.split(/[,，、]+/).map(function(x){return x.trim()}).filter(Boolean);s.herTags=$("euHerTags").value.split(/[,，、]+/).map(function(x){return x.trim()}).filter(Boolean);s.meCity=$("euMeCity").value.trim();s.herCity=$("euHerCity").value.trim();if($("euWho"))s.who=$("euWho").value;s.topMoment=$("euMoment").value.trim();s.lockPassword=$("euLockPwd").value.trim()||"211";if($("euMuUrl").value.trim())s.musicUrl=$("euMuUrl").value.trim();s.mailTo=$("euMailTo").value.trim();s.meEmoji=meE||CONFIG.me.emoji;s.herEmoji=herE||CONFIG.her.emoji;s.meImg=meImgSel||"";s.herImg=herImgSel||"";svUS();apS();if(CUR==="home")renHome();renUs();toast("已保存 💾")}
-/* ================= 航班页面 ================= */
-function renHome(){var d=dateInfo();$("heroNick").textContent=CONFIG.me.nickname+" ❤ "+CONFIG.her.nickname;$("homeBadge").textContent=(d.before?"距离在一起还有 ":"❤ 在一起第 ")+d.loveDays+" 天";setAv($("meAv"),CONFIG.me);setAv($("herAv"),CONFIG.her);countUp($("sMeet"),d.meetDays);countUp($("sLove"),d.loveDays);countUp($("sBirth"),d.taB.left,"天");countUp($("sAnniv"),d.annivLeft,"天");$("todayQuote").textContent=CONFIG.quotes[Math.floor(Math.random()*CONFIG.quotes.length)];renWx();renAchMini();renToday();$("themeSel").value=US.theme||"pink"}
-function nextQuote(){$("todayQuote").textContent=CONFIG.quotes[Math.floor(Math.random()*CONFIG.quotes.length)]}
-/* ================= 天气 ================= */
-function fmtCity(p){var c=String(p.city||"").trim().replace(/^四川省?\s*·?\s*/,"").replace(/^四川\s*·?\s*/,"");if(c==="达州渠县")c="达州 · 渠县";return c}
-function renWx(){var s=$("miniWX");if(!s)return;var wrap=document.createElement("div");wrap.className="wx-both";[CONFIG.me,CONFIG.her].forEach(function(p){var d=document.createElement("div");d.className="wx-mini";d.innerHTML='<span class="wi">—</span><div style="flex:1"><div class="wt">-°</div><div class="wm">'+esc(fmtCity(p))+'</div></div><span class="ws">加载</span>';wrap.appendChild(d);cw(p).then(function(x){var w=wt2(x.current.weather_code);d.querySelector(".wi").textContent=w[1];d.querySelector(".wt").textContent=Math.round(x.current.temperature_2m)+"°";d.querySelector(".ws").textContent=w[0]}).catch(function(){d.querySelector(".wi").textContent="🌈";d.querySelector(".wt").textContent="-°";d.querySelector(".ws").textContent="离线"})});s.innerHTML="";s.appendChild(wrap)}
-var wcCache={};
-function cw(p){var k=Math.round(p.lat*10000)+","+Math.round(p.lon*10000);if(wcCache[k])return Promise.resolve(wcCache[k]);var old=ls("love_wx_"+k);if(old&&Date.now()-old.t<1800000){wcCache[k]=old.d;return Promise.resolve(old.d)}var u="https://api.open-meteo.com/v1/forecast?latitude="+p.lat+"&longitude="+p.lon+"&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=3";return fetch(u).then(function(r){return r.json()}).then(function(d){wcCache[k]=d;lws("love_wx_"+k,{t:Date.now(),d:d});return d}).catch(function(){if(old){wcCache[k]=old.d;return old.d}throw 0})}
-function wt2(c){if(c===0)return["晴","☀️"];if(c<=2)return["多云","🌤️"];if(c===3)return["阴","☁️"];if(c>=51&&c<=57)return["毛毛雨","🌦️"];if(c>=61)return["雨","🌧️"];if(c>=71&&c<=77)return["雪","🌨️"];if(c>=80)return["雷雨","⛈️"];return["—","🌈"]}
-function careTip(c,p){var n=p===CONFIG.her?"欣欣":"方方";if(c.weather_code===0)return"☀️ 天晴，提醒"+n+"防晒喝水";if(c.weather_code>=61)return"☔ 有雨，提醒"+n+"带伞";if(c.temperature_2m<=5)return"🧣 很冷，叮嘱"+n+"穿厚点";if(c.temperature_2m>=30)return"🥵 很热，提醒"+n+"多喝水";return"💕 照顾好自己，别让"+n+"担心"}
-function wxCard(d,p){var w=wt2(d.current.weather_code);return '<div style="display:flex;align-items:center;gap:14px;margin:8px 0"><span style="font-size:34px">'+w[1]+'</span><div><div style="font-size:34px;font-weight:800;color:var(--p)">'+Math.round(d.current.temperature_2m)+'°C</div><div style="font-size:12px;color:var(--mu)">'+w[0]+' · 体感 '+Math.round(d.current.apparent_temperature)+'°</div></div></div><div style="font-size:12px;color:var(--mu);background:var(--c1);padding:8px 10px;border-radius:10px">'+careTip(d.current,p)+"</div>"}
-function loadWx(){cw(CONFIG.me).then(function(d){$("wMeBody").innerHTML=wxCard(d,CONFIG.me)}).catch(function(){$("wMeBody").innerHTML='<div style="color:var(--mu);text-align:center;padding:14px">获取失败，请联网</div>'});cw(CONFIG.her).then(function(d){$("wHerBody").innerHTML=wxCard(d,CONFIG.her)}).catch(function(){$("wHerBody").innerHTML='<div style="color:var(--mu);text-align:center;padding:14px">获取失败，请联网</div>'})}
-/* ================= 成就 & 积分 ================= */
-function myName(){return US.who==="ta"?CONFIG.her.nickname:CONFIG.me.nickname}
-function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
-function heartPop(){var h=document.createElement("div");h.className="poke-heart";h.textContent="💗";document.body.appendChild(h);setTimeout(function(){try{h.remove()}catch(e){}},700)}
-function pokeCount(){var d=ls("love_pokes_v1")||{};return d[ts()]||0}
-function fxPlus(k){var f=ls("love_fx_v1")||{};f[k]=(f[k]||0)+1;lws("love_fx_v1",f)}
-var pokeStreak=0,pokeTimer=null;
-function showHug(){
-  try{
-    var w=document.createElement("div"); w.className="hug";
-    var t2=document.createElement("div"); t2.className="txt"; t2.textContent="抱抱";
-    w.appendChild(t2); document.body.appendChild(w);
-    setTimeout(function(){try{w.remove()}catch(e){}},1800);
-  }catch(e){}
+function uploadAvatar(who){
+  var inp=document.getElementById("avIn");
+  if(!inp){
+    inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; inp.id="avIn";
+    inp.style.cssText="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0";
+    document.body.appendChild(inp);
+    inp.addEventListener("change",function(){
+      var f=inp.files&&inp.files[0]; if(!f)return;
+      var r=new FileReader();
+      r.onload=function(ev){
+        var im=new Image();
+        im.onload=function(){
+          var c=document.createElement("canvas"), mx=200, sc=Math.min(1,mx/Math.max(im.width,im.height));
+          c.width=Math.round(im.width*sc); c.height=Math.round(im.height*sc);
+          c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+          var d=c.toDataURL("image/jpeg",0.85);
+          if(who==="her"){ US.herImg=d; CONFIG.her.img=d } else { US.meImg=d; CONFIG.me.img=d }
+          svUS(); fillUsEdit(); renUs(); toast("头像换好啦 ✨");
+        };
+        im.src=ev.target.result;
+      };
+      r.readAsDataURL(f);
+      inp.value="";
+    });
+  }
+  inp.value=""; inp.click();
+}
+function savePwd(){
+  var v=(document.getElementById("setPwd")||{}).value||"";
+  if(!v.trim()){ toast("暗号不能为空"); return }
+  US.lockPassword=v.trim(); svUS(); toast("暗号已保存 🔒");
 }
 function heartRain(){
   try{
@@ -866,4 +867,10 @@ window.__back=function(){
 document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+<section class="view" id="v-set"><div class="topbar" style="position:static"><h2>⚙️ 设置</h2><div class="acts"><button class="top-ic" onclick="nav('us')">✕</button></div></div><div class="pg">
+<div class="card" style="padding:0;overflow:hidden"><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvMe">🦁</div><div><div class="pro-name">方方</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickMe"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('me')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euMeNick"></div><div class="pro-row"><label>标签</label><textarea id="euMeTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euMeCity"></div></div><div class="pro-card"><div class="pro-head"><div class="pro-av" id="pvHer">🐰</div><div><div class="pro-name">欣欣</div><div class="pro-sub">点表情选头像，或上传照片</div></div></div><div class="av-pick" id="pickHer"></div><div style="margin-top:8px"><button class="gh" onclick="uploadAvatar('her')">📷 上传照片</button></div><div class="pro-row"><label>昵称</label><input id="euHerNick"></div><div class="pro-row"><label>标签</label><textarea id="euHerTags" rows="1"></textarea></div><div class="pro-row"><label>城市</label><input id="euHerCity"></div></div><div class="pro-card"><div class="pro-row"><label>我是</label><select id="euWho" style="flex:1;border:none;background:transparent;font-size:14px"><option value="me">方方</option><option value="ta">欣欣</option></select></div><div class="pro-row"><label>置顶回忆</label><input id="euMoment"></div><div class="pro-row"><label>暗号</label><input id="euLockPwd"></div><div class="pro-row"><label>音乐</label><input id="euMuUrl" placeholder="mp3 地址"></div><div class="pro-row"><label>收信邮箱</label><input id="euMailTo"></div><div class="pro-row" style="border:none"><label>版本</label><a onclick="showVer()" style="color:var(--p);font-weight:800;font-size:13px">白榆 v2 · 点此查看更新内容</a></div><div class="row" style="margin-top:12px"><button class="btn" onclick="saveUsEdit()">💾 保存</button><button class="gh" onclick="exportBackup()">📦 备份</button><button class="gh" onclick="importBackup()">📥 导入备份</button><button class="gh" onclick="syncLink()">📤 同步链接</button></div></div></div>
+<div class="card"><div class="hd"><h3>🔒 暗号</h3></div><div class="pro-row" style="border:none"><label>进入暗号</label><input id="setPwd" placeholder="211"></div><div style="padding:0 4px 4px"><button class="btn" style="width:100%" onclick="savePwd()">保存暗号</button></div></div>
+<div class="card"><div class="hd"><h3>📦 数据</h3></div><div style="display:flex;gap:10px"><button class="gh" style="flex:1" onclick="exportBackup()">导出备份</button><button class="gh" style="flex:1" onclick="importBackup()">导入备份</button></div><div style="margin-top:10px"><button class="gh" style="width:100%" onclick="syncLink()">🔗 复制同步链接</button></div></div>
+<div class="card"><div class="hd"><h3>ℹ️ 关于</h3></div><div style="font-size:12px;color:var(--mu);line-height:2">白榆 · 方方 &amp; 欣欣的小家<br>版本 <span id="setVer">-</span><br><a onclick="showVer()" style="color:var(--p);font-weight:800">查看更新内容</a></div></div>
+</div></section>
 </body></html>
