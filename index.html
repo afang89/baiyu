@@ -332,7 +332,12 @@ function startTimeSet(){var el=$("loveTimer");if(!el)return;function tick(){var 
 function dateInfo(){var n=t0(),st=pD(CONFIG.startDate),mt=pD(CONFIG.meetDate),before=st>n,ld=Math.abs(dD(st,n)),md=Math.abs(dD(mt,n));var an=new Date(n.getFullYear(),st.getMonth(),st.getDate());if(an<n)an.setFullYear(an.getFullYear()+1);function nb(birth){var p=String(birth).split("-"),d=new Date(n.getFullYear(),+p[1]-1,+p[2]);if(d<n)d.setFullYear(d.getFullYear()+1);return{left:dD(n,d),date:fmt(d)}}return{loveDays:ld,meetDays:md,before:before,annivLeft:dD(n,an),annivDate:fmt(an),myB:nb(CONFIG.me.birthday),taB:nb(CONFIG.her.birthday)}}
 function distKm(){var R=6371,ra=Math.PI/180,a=CONFIG.me,b=CONFIG.her,dl=(b.lat-a.lat)*ra,dn=(b.lon-a.lon)*ra;var h=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*ra)*Math.cos(b.lat*ra)*Math.sin(dn/2)*Math.sin(dn/2);return Math.round(R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)))}
 /* ================= 路由 ================= */
-function nav(r){document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
+function nav(r,fromHist){
+  if(!fromHist){
+    closeGame();
+    try{ if(!history.state||history.state.v!==r) history.pushState({v:r,g:null},"","#"+r) }catch(e){}
+  }
+  document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
 /* ================= 头像 ================= */
 var EMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
 function setAv(el,p){if(!el)return;if(p.img){el.style.backgroundImage="url("+p.img+")";el.style.backgroundSize="cover";el.style.backgroundPosition="center";el.textContent=""}else{el.style.backgroundImage="none";el.textContent=p.emoji}}
@@ -563,6 +568,7 @@ function memReset(nb){MEM={cards:memBuild(),flip:[],match:[],lock:false,done:fal
 function handleGame(v){if(!v)return;if(v.game==="tt"){TT.b=v.b;TT.turn=v.turn;TT.over=v.over;ttDraw()}else if(v.game==="tt-reset"){TT={b:[null,null,null,null,null,null,null,null,null],turn:"X",over:null};ttDraw()}else if(v.game==="rps"){if(v.dev!==myDev()){RPS[v.dev]=v.c;rpsDraw()}}else if(v.game==="rps-reset"){RPS={};rpsDraw()}else if(v.game==="tap"){if(v.type==="win"){if(v.dev!==myDev()){TAP.ta=10;TAP.done=true}tapDraw()}else if(v.dev!==myDev()){TAP.ta=v.n;tapDraw()}}else if(v.game==="tap-reset"){TAP={me:0,ta:0,done:false};tapDraw()}else if(v.game==="mem-done"){if(v.dev!==myDev()){MEM.ta=v.t;$("memTaTime").textContent=v.t+" 秒";$("memInfo").textContent="💔 TA 先翻完了，用了 "+v.t+" 秒";toast("TA 翻完啦！")}}else if(v.game==="mem-reset"){memReset(true)}}function hGameMsg(u){if(!u)return;if(u.k==="gomoku"){if(u.v.type==="m"){GO.b=u.v.b;GO.turn=u.v.turn;GO.over=u.v.over}else{GO={b:goFresh(),turn:"B",over:null}}goDraw()}else if(u.k==="xiangqi"){if(u.v.type==="m"){X.bd=u.v.bd;X.turn=u.v.turn;X.over=u.v.over;X.sel=-1}else{X={bd:XQ.fresh(),turn:1,over:0,sel:-1}}xqDraw()}}
 var GWINS=["tt","rps","go","xq","tap","mem"];
 function openGame(id){
+  try{ history.pushState({v:"games",g:id},"","#games") }catch(e){}
   GWINS.forEach(function(g){var el=$("gw-"+g);if(el)el.classList.remove("on")});
   var w=$("gw-"+id); if(w)w.classList.add("on");
   if(id==="tt")ttDraw(); if(id==="rps")rpsDraw(); if(id==="go")goDraw();
@@ -586,6 +592,12 @@ new MutationObserver(function(){document.querySelectorAll('[id^="sb__"],div[clas
 /* ================= 初始化 ================= */
 var CUR="home";
 function init(){checkLock();checkImportHash();initMusic();startTimeSet();bindPhotoInput();$("themeSel").value=US.theme||"pink";renHome();stM()}
+window.addEventListener("popstate",function(e){
+  var st=e.state||{v:"home",g:null};
+  GWINS.forEach(function(g){var el=$("gw-"+g);if(el)el.classList.remove("on")});
+  if(st.g){ openGame(st.g); nav("games",true); }
+  else { nav(st.v||"home",true); }
+});
 document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
