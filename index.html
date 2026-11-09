@@ -172,12 +172,13 @@ to{opacity:1;transform:translate(-50%,0)}}
 .sp-skip{position:absolute;right:16px;bottom:34px;font-size:12px;font-weight:700;color:#7d6570;background:rgba(255,255,255,.72);padding:8px 18px;border-radius:99px;border:1px solid rgba(0,0,0,.05);backdrop-filter:blur(8px)}
 @keyframes spUp{from{opacity:0;transform:translateY(16px)}}
 @keyframes spLoad{to{width:100%}}
-#photoView{position:fixed;inset:0;z-index:880;background:rgba(12,8,10,.96);display:none;align-items:center;justify-content:center;flex-direction:column}
+#photoView{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;z-index:880;background:#080708;display:none;align-items:center;justify-content:center;overflow:hidden;touch-action:pan-y;}
 #photoView.on{display:flex}
-#photoView img,#photoView video{position:absolute;inset:0;width:100vw;height:100dvh;max-width:none!important;max-height:none!important;border-radius:0!important;object-fit:contain;background:#080708}
-#photoView .pv-cap{position:absolute;left:16px;right:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));color:#ffd9e2;font-size:13px;text-align:center;pointer-events:none}
-#photoView .pv-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;z-index:3;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
-#photoView .pv-download-hint{position:absolute;left:50%;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:3;transform:translateX(-50%);white-space:nowrap;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.24);border-radius:20px;padding:9px 15px;font-size:13px;touch-action:none;user-select:none;-webkit-user-select:none}
+#photoView img,#photoView video{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none!important;max-height:none!important;margin:0;padding:0;border-radius:0!important;object-fit:contain;background:#080708;touch-action:pan-y;}
+#photoView .pv-cap{position:absolute;left:16px;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2;color:#fff;font-size:13px;text-align:center;pointer-events:none;text-shadow:0 1px 4px #000}
+#photoView .pv-close{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(30,30,30,.58);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+#photoView .pv-download-hint{position:absolute;left:50%;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:4;transform:translateX(-50%);white-space:nowrap;color:#fff;background:rgba(30,30,30,.68);border:1px solid rgba(255,255,255,.32);border-radius:22px;padding:10px 18px;font-size:14px;touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+@media (max-width:600px){#photoView{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh}#photoView img,#photoView video{object-fit:contain}#photoView .pv-close{width:46px;height:46px}#photoView .pv-download-hint{min-height:44px}}
 .ach2{background:var(--c2);border-radius:18px;padding:14px;box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start}
 .ach2.lock{opacity:.48}
 .ach2 .ai{font-size:30px;line-height:1}
@@ -342,7 +343,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-6";
+var APP_VER="2026-11-10-7";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -647,8 +648,8 @@ function renPhotos(){
       (p.caption?'<span style="position:absolute;bottom:6px;left:0;right:0;font-size:10px;color:#fff;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.5)">'+esc(p.caption)+'</span>':'')+
       (p.kind==="video"?'<span style="position:absolute;top:6px;right:6px;font-size:11px">▶</span>':'')+'</div>'}).join("");
 }
-var photoViewIndex=0,photoTouchX=0;
-function openPhoto(i){showPhotoAt(i);var v=$("photoView");v.classList.add("on")}
+var photoViewIndex=0,photoTouchX=0,photoTouchY=0;
+function openPhoto(i){showPhotoAt(i);var v=$("photoView");v.classList.add("on");document.body.style.overflow="hidden"}
 function showPhotoAt(i){if(!photoView.length)return;photoViewIndex=(i+photoView.length)%photoView.length;var p=photoView[photoViewIndex];if(!p||!p.src)return;
   var im=$("pvImg"),vid=$("pvVideo"),isVideo=p.kind==="video";
   im.style.display=isVideo?"none":"block";vid.style.display=isVideo?"block":"none";
@@ -656,12 +657,12 @@ function showPhotoAt(i){if(!photoView.length)return;photoViewIndex=(i+photoView.
   $("pvCap").textContent=p.caption||"";
   var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-"+(p.kind==="video"?"live-":"photo-")+(p.id||Date.now())+(p.kind==="video"?".mp4":(p.mime==="image/png"?".png":p.mime==="image/webp"?".webp":".jpg"))}
 }
-function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
-function photoSwipeStart(e){photoTouchX=(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:0)}
-function photoSwipeEnd(e){var x=e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:photoTouchX,dx=x-photoTouchX;if(Math.abs(dx)>50)showPhotoAt(photoViewIndex+(dx<0?1:-1))}
-function downloadPhotoStart(e){e.preventDefault();e.stopPropagation();var el=$("pvDownload");if(el){el.dataset.longpressed="0";el._longPressTimer=setTimeout(function(){el.dataset.longpressed="1";toast("请长按媒体画面保存图片或视频")},550)}}
-function downloadPhotoEnd(e){if(e){e.preventDefault();e.stopPropagation()}var el=$("pvDownload");if(el&&el._longPressTimer)clearTimeout(el._longPressTimer);if(el&&el.dataset.longpressed==="1"){el.dataset.longpressed="0";return}toast("请长按图片或视频画面，然后选择保存")}
-function downloadPhotoCancel(e){if(e)e.stopPropagation();var el=$("pvDownload");if(el&&el._longPressTimer)clearTimeout(el._longPressTimer)}
+function closePhoto(){ $("photoView").classList.remove("on");document.body.style.overflow="";$("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
+function photoSwipeStart(e){var t=e.touches&&e.touches[0];if(!t)return;photoTouchX=t.clientX;photoTouchY=t.clientY}
+function photoSwipeEnd(e){var t=e.changedTouches&&e.changedTouches[0];if(!t)return;var dx=t.clientX-photoTouchX,dy=t.clientY-photoTouchY;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)showPhotoAt(photoViewIndex+(dx<0?1:-1))}
+function downloadPhotoStart(e){if(e)e.stopPropagation();var el=$("pvDownload");if(el){el.dataset.longpressed="0";el._longPressTimer=setTimeout(function(){el.dataset.longpressed="1";el.textContent="请长按媒体画面保存";toast("请长按图片画面，然后选择保存图片")},550)}}
+function downloadPhotoEnd(e){if(e)e.stopPropagation();var el=$("pvDownload");if(el&&el._longPressTimer)clearTimeout(el._longPressTimer);if(el&&el.dataset.longpressed==="1"){el.dataset.longpressed="0";setTimeout(function(){el.textContent="长按图片保存"},1800);return}toast("在图片上长按，然后选择“保存图片”")}
+function downloadPhotoCancel(e){if(e)e.stopPropagation();var el=$("pvDownload");if(el&&el._longPressTimer){clearTimeout(el._longPressTimer);el._longPressTimer=null}}
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function storePhoto(item){var a=ls("love_photos_v1")||[];a.push(item);localStorage.setItem("love_photos_v1",JSON.stringify(a));var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].id!==item.id)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});renPhotos()}
 function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){try{storePhoto({id:uid(),src:ev.target.result,kind:"image",caption:"",cat:"日常",mime:f.type});toast("已加入相册")}catch(err){toast("原图超过本机存储空间，请换一张较小文件") }};r2.readAsDataURL(f)});e.target.value=""})}
@@ -1045,7 +1046,7 @@ window.__back=function(){
     return "0";
   }catch(e){return "0"}
 };
-document.addEventListener("DOMContentLoaded",init);
+document.addEventListener("DOMContentLoaded",function(){init();var pv=$("photoView");if(pv){pv.addEventListener("touchstart",photoSwipeStart,{passive:true});pv.addEventListener("touchend",photoSwipeEnd,{passive:true})}});
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
