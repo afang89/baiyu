@@ -343,18 +343,26 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-7";
+var APP_VER="2026-11-10-8";
 function checkUpdate(){
-  try{
-    fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
-      v=(v||"").trim();
-      if(!v||v===APP_VER) return;
-      return fetch("index.html?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(h){
-        if(!h||h.indexOf("白榆")<0||h.length<5000) return;
-        try{ localStorage.removeItem("baiyu_upd") }catch(e){}
-      });
-    }).catch(function(){});
-  }catch(e){}
+  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("version");return r.text()}).then(function(v){
+    v=(v||"").trim();if(!v||v===APP_VER)return;
+    return fetch("changelog.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():{version:v,items:["有新版可用"]}}).catch(function(){return {version:v,items:["有新版可用"]}}).then(function(log){
+      var seen=localStorage.getItem("baiyu_seen_version");if(seen===v)return;
+      showUpdateDetails(v,log.items||[]);
+    });
+  }).catch(function(){});
+}
+function showUpdateDetails(version,items){
+  if($("updateDetails"))return;
+  var box=document.createElement("div");box.id="updateDetails";box.style.cssText="position:fixed;inset:0;z-index:12000;background:rgba(0,0,0,.58);display:flex;align-items:center;justify-content:center;padding:20px";
+  var panel=document.createElement("div");panel.style.cssText="background:var(--c2);color:var(--ink);border-radius:18px;padding:22px;width:min(92vw,420px);max-height:80dvh;overflow:auto;box-shadow:0 16px 48px rgba(0,0,0,.3)";
+  var title=document.createElement("h3");title.textContent="白榆更新明细 · "+version;title.style.cssText="margin:0 0 14px;text-align:center;color:var(--p)";panel.appendChild(title);
+  var list=document.createElement("ul");list.style.cssText="padding-left:22px;line-height:1.8;font-size:14px";(items.length?items:["体验优化"]).forEach(function(t){var li=document.createElement("li");li.textContent=t;list.appendChild(li)});panel.appendChild(list);
+  var actions=document.createElement("div");actions.style.cssText="display:flex;gap:10px;margin-top:18px";
+  var later=document.createElement("button");later.textContent="稍后刷新";later.style.cssText="flex:1;padding:12px;border-radius:10px;background:var(--ac)";later.onclick=function(){localStorage.setItem("baiyu_seen_version",version);box.remove()};
+  var refresh=document.createElement("button");refresh.textContent="立即更新";refresh.style.cssText="flex:1;padding:12px;border-radius:10px;background:var(--p);color:#fff";refresh.onclick=function(){localStorage.setItem("baiyu_seen_version",version);var u=new URL(location.href);u.searchParams.set("v",version);u.searchParams.set("t",Date.now());location.replace(u.toString())};
+  actions.appendChild(later);actions.appendChild(refresh);panel.appendChild(actions);box.appendChild(panel);document.body.appendChild(box);
 }
 var CONFIG={me:{name:"方方",nickname:"方方",emoji:"🦁",city:"南京 · 江宁",hometown:"河南安阳",lat:31.9526,lon:118.8395,birthday:"2007-08-09",img:"",tags:["河南人","在南京上学","细心","行动派","守护型","一诺千金","爱打篮球"]},her:{name:"欣欣",nickname:"欣欣",emoji:"🐰",city:"达州 · 渠县",hometown:"达州 · 渠县",lat:30.8365,lon:106.9743,birthday:"2009-04-14",img:"",tags:["川妹子","可爱","小吃货","嘴硬心软","快乐源泉","有主见","我的乖乖"]},startDate:"2026-02-11",meetDate:"2021-05-23",milestones:[100,200,365,520,999,1314],timeline:[{date:"2021-05-23",title:"我们认识了",text:"在人群里遇见你，故事悄悄开始。"},{date:"2026-02-11",title:"我们在一起了",text:"终于牵到你的手，往后的每一天都是你。"}],future:[{icon:"🌉",title:"结束异地",text:"总有一天要在同一个城市醒来。"},{icon:"🍲",title:"一起去成都",text:"吃遍成都，也看看她长大的地方。"},{icon:"🎓",title:"一起毕业长大",text:"每个重要节点都一起走。"},{icon:"👨‍👩‍👧",title:"见彼此家人",text:"安阳和渠县的爸妈，要看到我们幸福的样子。"},{icon:"🌊",title:"去看海",text:"看一次海，看一次日出，拍很多合照。"},{icon:"❤️",title:"一直在一起",text:"不管距离多远，白榆里永远有我们。"}],quotes:["你是我平淡生活里最浪漫的惊喜。","遇见你之后，我的每一天都有了方向。","世界很大，而我心里只装得下一个你。","想把所有温柔都攒起来送给你。","和你在一起，连发呆都变得有趣。","希望我们一直在一起，慢慢变老。"],spin:["吃火锅","喝奶茶","看电影","散步","吃蛋糕","宅家"],dailyQ:["今天最想对方的一刻？","如果现在能见面，最想做什么？","今天没说出口的话？","最想一起做的小事？","偷偷夸TA的一件事？","给未来的我们留一句话。"],topMoment:""};;
 /* 读取已保存的资料 */
