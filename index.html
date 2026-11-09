@@ -332,7 +332,7 @@ body.locking{overflow:hidden;height:100dvh}
 <div class="gwin" id="gw-mem"><div class="gw-bar"><b>🃏 翻翻乐</b><button onclick="closeGame()">✕</button></div><div class="gw-body"><div class="card"><div class="hd"><h3>同一副牌比速度</h3><span class="sync-badge" id="memStatus">…</span></div><div id="memInfo" style="text-align:center;font-size:13px;font-weight:800;color:var(--p);margin-bottom:12px">两人同一副牌，看谁先翻完</div><div class="mem-grid" id="memGrid"></div><div style="text-align:center;margin-top:12px;font-size:12px;color:var(--mu)">我的用时 <b id="memTime">0.0</b> 秒 · TA 用时 <b id="memTaTime">—</b></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="memReset()">🔄 重来</button></div></div></div></div>
 </div>
 
-<nav class="bnav"><a data-route="home" class="on" onclick="nav('home')"><span class="ic">🏠</span>首页</a><a data-route="emotions" onclick="nav('emotions')"><span class="ic">🎁</span>情绪</a><a data-route="wishes" onclick="nav('wishes')"><span class="ic">✅</span>心愿</a><a data-route="play" onclick="nav('play')"><span class="ic">🎡</span>互动</a><a data-route="us" onclick="nav('us')"><span class="ic">💕</span>我们</a><a data-route="set" onclick="nav('set')"><span class="ic">⚙️</span>设置</a></nav>
+<nav class="bnav"><a data-route="home" class="on" onclick="nav('home')"><span class="ic">🏠</span>首页</a><a data-route="photos" onclick="nav('photos')"><span class="ic">📸</span>相册</a><a data-route="emotions" onclick="nav('emotions')"><span class="ic">🎁</span>情绪</a><a data-route="wishes" onclick="nav('wishes')"><span class="ic">✅</span>心愿</a><a data-route="play" onclick="nav('play')"><span class="ic">🎡</span>互动</a><a data-route="us" onclick="nav('us')"><span class="ic">💕</span>我们</a><a data-route="set" onclick="nav('set')"><span class="ic">⚙️</span>设置</a></nav>
 
 <div class="modal" id="tlEdit"><div class="box"><h3>✏️ 编辑节点</h3><input class="inp" id="tlD" placeholder="日期，例 2025-06-01"><input class="inp" id="tlT" placeholder="标题" style="margin-top:8px"><textarea class="inp" id="tlX" rows="2" placeholder="描述" style="margin-top:8px"></textarea><div class="row" style="margin-top:12px;justify-content:center"><button class="btn" onclick="tlSave()">保存</button><button class="gh" onclick="tlClose()">取消</button><button class="gh" style="color:#c4455a" onclick="tlDel()">删除</button></div><input type="hidden" id="tlIdx"></div></div>
 
@@ -341,7 +341,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-2";
+var APP_VER="2026-11-10-3";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -455,7 +455,7 @@ function uploadAvatar(who){
           c.getContext("2d").drawImage(im,0,0,c.width,c.height);
           var d=c.toDataURL("image/jpeg",0.85);
           if(who==="her"){ US.herImg=d; CONFIG.her.img=d } else { US.meImg=d; CONFIG.me.img=d }
-          svUS(); renHome(); fillUsEdit(); renUs(); toast("头像换好啦 ✨"); inp.remove();
+          svUS(); mqRaw({k:"love_avatar_v1",v:{id:uid(),who:who,img:d},t:"one"}); renHome(); fillUsEdit(); renUs(); toast("头像换好啦 ✨"); inp.remove();
         };
         im.onerror=function(){toast("图片无法读取");inp.remove()};
         im.src=ev.target.result;
@@ -652,6 +652,7 @@ function openPhoto(i){
   var p=photoView[i];if(!p||!p.src)return;
   $("pvImg").src=p.src;
   $("pvCap").textContent=p.caption||"";
+  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-photo-"+(p.id||Date.now())+".jpg"}
   $("photoView").classList.add("on");
 }
 function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src=""; }
@@ -767,7 +768,7 @@ function mqRaw(o){
   if(!syncOn||!syncCli) return;
   try{ syncCli.publish(ROOM,JSON.stringify(o)) }catch(err){}
 }
-var SYNC_KEYS={love_photos_v1:1,love_anniversaries_v1:1,love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
+var SYNC_KEYS={love_avatar_v1:1,love_photos_v1:1,love_anniversaries_v1:1,love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
 function pushOne(k,it){
   if(!it||!it.id) return 0;
   var lo=ls(k); if(!Array.isArray(lo)) lo=[];
@@ -797,6 +798,8 @@ function lw(k,v){
 }
 function mkSnap(){
   for(var k in SYNC_KEYS){ var v=ls(k); if(v) mqRaw({k:k,v:v,t:"snap"}) }
+  if(US.meImg) mqRaw({k:"love_avatar_v1",v:{id:"snapshot-me",who:"me",img:US.meImg},t:"one"});
+  if(US.herImg) mqRaw({k:"love_avatar_v1",v:{id:"snapshot-her",who:"her",img:US.herImg},t:"one"});
 }
 function handleMqMsg(topic,msg){
   try{
@@ -808,6 +811,10 @@ function handleMqMsg(topic,msg){
     if(u.k==="__rain"){ buzz(80); heartRain(); toast(((u.v&&u.v.from)||"TA")+" 送了你一场爱心雨 ❤️"); return }
     if(u.k==="game"){ handleGame(u.v); return }
     if(u.k==="gomoku"||u.k==="xiangqi"){ hGameMsg(u); return }
+    if(u.k==="love_avatar_v1"&&u.v&&u.v.who&&u.v.img){
+      if(u.v.who==="her"){US.herImg=u.v.img;CONFIG.her.img=u.v.img}else{US.meImg=u.v.img;CONFIG.me.img=u.v.img}
+      svUS(); renHome(); if(CUR==="us"||CUR==="set"){renUs();fillUsEdit()} toast("收到 TA 的头像更新 💕"); return;
+    }
     var n=(u.t==="one")?pushOne(u.k,u.v):mergeIn(u.k,u.v);
     if(n){
       if(CUR==="emotions")renEmo();
@@ -1034,5 +1041,5 @@ document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
-<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><div class="pv-cap" id="pvCap"></div></div>
+<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="event.stopPropagation()">⬇ 下载图片</a></div>
 </body></html>
