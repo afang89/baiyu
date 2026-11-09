@@ -248,7 +248,7 @@ body.locking{overflow:hidden;height:100dvh}
 </div></section>
 
 <!-- 纪念日 -->
-<section class="view" id="v-days"><div class="topbar" style="position:static"><h2>💝 纪念日</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>倒计时</h3></div><div id="daysGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div></div><div class="card"><div class="hd"><h3>🎯 里程碑</h3></div><div id="mileText" style="font-size:13px;color:var(--mu)"></div><div style="height:10px;border-radius:99px;background:var(--ac);overflow:hidden;margin:8px 0"><div id="mileBar" style="height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--p2),var(--p));transition:width .5s"></div></div><div id="mileNum" style="text-align:right;font-size:12px;color:var(--mu)"></div></div><div class="card"><div class="hd"><h3>🗓 重要日子</h3></div><div id="impList"></div></div></div></section>
+<section class="view" id="v-days"><div class="topbar" style="position:static"><h2>💝 纪念日</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>倒计时</h3></div><div id="daysGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div></div><div class="card"><div class="hd"><h3>🎯 里程碑</h3></div><div id="mileText" style="font-size:13px;color:var(--mu)"></div><div style="height:10px;border-radius:99px;background:var(--ac);overflow:hidden;margin:8px 0"><div id="mileBar" style="height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--p2),var(--p));transition:width .5s"></div></div><div id="mileNum" style="text-align:right;font-size:12px;color:var(--mu)"></div></div><div class="card"><div class="hd"><h3>🗓 重要日子</h3><button class="gh" onclick="annivNew()">＋ 添加</button></div><div id="annivForm" style="display:none;margin:8px 0"><input class="inp" id="annivTitle" placeholder="纪念日名称"><input class="inp" id="annivDate" type="date" style="margin-top:8px"><div class="row" style="margin-top:8px"><button class="btn" onclick="annivSave()">保存</button><button class="gh" onclick="annivCancel()">取消</button></div></div><div id="impList"></div></div></div></section>
 
 <!-- 相册 -->
 <section class="view" id="v-photos"><div class="topbar" style="position:static"><h2>📸 相册</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs" id="photoFilters"><span class="tb on" data-cat="all">全部</span><span class="tb" data-cat="合照">合照</span><span class="tb" data-cat="单人">单人</span><span class="tb" data-cat="旅行">旅行</span><span class="tb" data-cat="日常">日常</span></div><div class="pgrid" id="photoGrid"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="resetPhotos()">清空相册</button></div></div></section>
@@ -318,7 +318,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-03-4";
+var APP_VER="2026-11-10-1";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -404,9 +404,12 @@ function startTimeSet(){var el=$("loveTimer");if(!el)return;function tick(){var 
 function dateInfo(){var n=t0(),st=pD(CONFIG.startDate),mt=pD(CONFIG.meetDate),before=st>n,ld=Math.abs(dD(st,n)),md=Math.abs(dD(mt,n));var an=new Date(n.getFullYear(),st.getMonth(),st.getDate());if(an<n)an.setFullYear(an.getFullYear()+1);function nb(birth){var p=String(birth).split("-"),d=new Date(n.getFullYear(),+p[1]-1,+p[2]);if(d<n)d.setFullYear(d.getFullYear()+1);return{left:dD(n,d),date:fmt(d)}}return{loveDays:ld,meetDays:md,before:before,annivLeft:dD(n,an),annivDate:fmt(an),myB:nb(CONFIG.me.birthday),taB:nb(CONFIG.her.birthday)}}
 function distKm(){var R=6371,ra=Math.PI/180,a=CONFIG.me,b=CONFIG.her,dl=(b.lat-a.lat)*ra,dn=(b.lon-a.lon)*ra;var h=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*ra)*Math.cos(b.lat*ra)*Math.sin(dn/2)*Math.sin(dn/2);return Math.round(R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h)))}
 /* ================= 路由 ================= */
+var routeStack=["home"];
 function nav(r,fromHist){
+  if(!r||r===CUR)return;
+  if(!fromHist){ if(routeStack[routeStack.length-1]!==CUR)routeStack.push(CUR); routeStack.push(r); }
   CUR=r;
-  if(!fromHist){ closeGame(); }
+  closeGame();
   document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on")});var el=$("v-"+r);if(el)el.classList.add("on");document.querySelectorAll(".bnav a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-route")===r)});if(r==="home")renHome();if(r==="days")renDays();if(r==="photos")renPhotos();if(r==="us")renUs();if(r==="set"){fillUsEdit();var pv=$("setPwd");if(pv)pv.value=String(US.lockPassword||"211");var sv=$("setVer");if(sv)sv.textContent=APP_VER;}if(r==="emotions")renEmo();if(r==="wishes")renWish();if(r==="play")renPlay();if(r==="mail")renMail();if(r==="weather")loadWx();if(r==="achievements")renAch();if(r==="watch"||r==="listen"||r==="games")setGameStatus();if(r==="games")renGames();window.scrollTo(0,0)}
 /* ================= 头像 ================= */
 var EMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
@@ -414,13 +417,12 @@ function setAv(el,p){if(!el)return;if(p.img){el.style.backgroundImage="url("+p.i
 function pickAv(who,i){var e=EMO[i];if(who==="me"){meImgSel=null;$("pvMe").style.backgroundImage="none";$("pvMe").textContent=e}else{herImgSel=null;$("pvHer").style.backgroundImage="none";$("pvHer").textContent=e}markAvPick(who,e)}
 function markAvPick(who,e){document.querySelectorAll("#pick"+(who==="me"?"Me":"Her")+" button").forEach(function(x){x.classList.toggle("on",x.textContent===e)})}
 function uploadAvatar(who){
-  var inp=document.getElementById("avIn");
-  if(!inp){
-    inp=document.createElement("input"); inp.type="file"; inp.accept="image/*"; inp.id="avIn";
-    inp.style.cssText="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0";
-    document.body.appendChild(inp);
-    inp.addEventListener("change",function(){
-      var f=inp.files&&inp.files[0]; if(!f)return;
+  var inp=document.createElement("input");
+  inp.type="file"; inp.accept="image/*";
+  inp.style.cssText="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0";
+  document.body.appendChild(inp);
+  inp.addEventListener("change",function(){
+      var f=inp.files&&inp.files[0]; if(!f){inp.remove();return;}
       var r=new FileReader();
       r.onload=function(ev){
         var im=new Image();
@@ -430,15 +432,15 @@ function uploadAvatar(who){
           c.getContext("2d").drawImage(im,0,0,c.width,c.height);
           var d=c.toDataURL("image/jpeg",0.85);
           if(who==="her"){ US.herImg=d; CONFIG.her.img=d } else { US.meImg=d; CONFIG.me.img=d }
-          svUS(); fillUsEdit(); renUs(); toast("头像换好啦 ✨");
+          svUS(); renHome(); fillUsEdit(); renUs(); toast("头像换好啦 ✨"); inp.remove();
         };
+        im.onerror=function(){toast("图片无法读取");inp.remove()};
         im.src=ev.target.result;
       };
+      r.onerror=function(){toast("照片读取失败");inp.remove()};
       r.readAsDataURL(f);
-      inp.value="";
-    });
-  }
-  inp.value=""; inp.click();
+    },{once:true});
+  inp.click();
 }
 function savePwd(){
   var v=(document.getElementById("setPwd")||{}).value||"";
@@ -462,6 +464,7 @@ function heartRain(){
     setTimeout(function(){try{box.remove()}catch(e){}},5200);
   }catch(e){}
 }
+var clientId=ls("love_client_id_v1");if(!clientId){clientId=uid();lws("love_client_id_v1",clientId)}
 var pokeStreak=0,pokeTimer=null;
 function poke(){
   buzz(35); heartPop();
@@ -471,7 +474,7 @@ function poke(){
   renToday();
   if(pokeStreak>=10){ heartRain(); buzz(50); fxPlus("rain"); mqRaw({k:"__rain",v:{from:myName()}}); toast("送 TA 一场爱心雨 ❤️"); pokeStreak=0; }
   else if(pokeStreak===3){ showHug(); buzz(40); fxPlus("hug"); mqRaw({k:"__hug",v:{from:myName()}}); toast("抱抱 🫂"); }
-  else { mqRaw({k:"__poke",v:{from:myName(),ts:Date.now()}}); toast("已戳 TA 一下 💗"); }
+  else { mqRaw({k:"__poke",v:{from:myName(),ts:Date.now(),sender:clientId}}); toast("已戳 TA 一下 💗"); }
 }
 function renToday(){
   if(!$("tdNum"))return;
@@ -595,9 +598,15 @@ function achInfo(i){
     '<div style="font-size:12px;margin-top:14px;font-weight:800;color:'+(on?'#2e9e57':'var(--mu)')+'">'+(on?'✓ 已获得':'还差 '+Math.max(0,a.n-(typeof cur==="number"?cur:0))+' 即可获得')+'</div>';
   box.innerHTML=""; box.appendChild(inner);
 }
+/* ================= 自定义纪念日 ================= */
+function annivList(){return ls("love_anniversaries_v1")||[]}
+function annivNew(){var f=$("annivForm");if(!f)return;$("annivTitle").value="";$("annivDate").value=ts();f.style.display="block"}
+function annivCancel(){var f=$("annivForm");if(f)f.style.display="none"}
+function annivSave(){var title=$("annivTitle").value.trim(),date=$("annivDate").value;if(!title||!date){toast("请填写名称和日期");return}var a=annivList();a.push({id:uid(),title:title,date:date});lws("love_anniversaries_v1",a);mqRaw({k:"love_anniversaries_v1",v:a[a.length-1],t:"one"});annivCancel();renDays();toast("纪念日已保存 💝")}
+function annivDelete(id){var a=annivList().filter(function(x){return x.id!==id});lws("love_anniversaries_v1",a);renDays();toast("已删除")}
 /* ================= 纪念日 ================= */
 function mileInfo(){var d=dateInfo(),m=null;for(var i=0;i<CONFIG.milestones.length;i++)if(CONFIG.milestones[i]>d.loveDays){m=CONFIG.milestones[i];break}if(!m)return{l:"全部达成!",p:100};return{l:m-d.loveDays,p:Math.min(100,Math.round(d.loveDays/m*100))}}
-function renDays(){var d=dateInfo(),cells=[["我们已经在一起",d.loveDays,CONFIG.startDate],["下个周年",d.annivLeft,d.annivDate],["方方生日",d.myB.left,"8月9日"],["欣欣生日",d.taB.left,"4月14日"]];$("daysGrid").innerHTML=cells.map(function(c){return '<div style="text-align:center;background:var(--c1);border-radius:14px;padding:14px 8px"><div style="font-size:11px;color:var(--mu)">'+c[0]+'</div><b style="font-size:26px;color:var(--p)">'+c[1]+'</b><div style="font-size:11px;color:var(--mu)">'+c[2]+"</div></div>"}).join("");var mi=mileInfo();$("mileText").textContent="下个里程碑："+mi.l+" 天";$("mileBar").style.width=mi.p+"%";$("mileNum").textContent=mi.p+"%";var rows=[["认识 🫶",CONFIG.meetDate,"已 "+d.meetDays+" 天"],["在一起 💖",CONFIG.startDate,d.before?"还有"+d.loveDays+" 天":"已 "+d.loveDays+" 天"],["方方 🎂",CONFIG.me.birthday,d.myB.left+" 天后"],["欣欣 🎂",CONFIG.her.birthday,d.taB.left+" 天后"],["周年 💍",d.annivDate,d.annivLeft+" 天后"],["距离 🗺","南京 ↔ 达州","约 "+distKm()+" 公里"]];$("impList").innerHTML=rows.map(function(r){return '<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--ac)"><b>'+r[0]+'</b><span style="color:var(--mu)">'+r[1]+" · "+r[2]+"</span></div>"}).join("")}
+function renDays(){var d=dateInfo(),cells=[["我们已经在一起",d.loveDays,CONFIG.startDate],["下个周年",d.annivLeft,d.annivDate],["方方生日",d.myB.left,"8月9日"],["欣欣生日",d.taB.left,"4月14日"]];$("daysGrid").innerHTML=cells.map(function(c){return '<div style="text-align:center;background:var(--c1);border-radius:14px;padding:14px 8px"><div style="font-size:11px;color:var(--mu)">'+c[0]+'</div><b style="font-size:26px;color:var(--p)">'+c[1]+'</b><div style="font-size:11px;color:var(--mu)">'+c[2]+"</div></div>"}).join("");var mi=mileInfo();$("mileText").textContent="下个里程碑："+mi.l+" 天";$("mileBar").style.width=mi.p+"%";$("mileNum").textContent=mi.p+"%";var rows=[["认识 🫶",CONFIG.meetDate,"已 "+d.meetDays+" 天"],["在一起 💖",CONFIG.startDate,d.before?"还有"+d.loveDays+" 天":"已 "+d.loveDays+" 天"],["方方 🎂",CONFIG.me.birthday,d.myB.left+" 天后"],["欣欣 🎂",CONFIG.her.birthday,d.taB.left+" 天后"],["周年 💍",d.annivDate,d.annivLeft+" 天后"],["距离 🗺","南京 ↔ 达州","约 "+distKm()+" 公里"]];var custom=annivList();var html=rows.map(function(r){return '<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--ac)"><b>'+r[0]+'</b><span style="color:var(--mu)">'+r[1]+" · "+r[2]+"</span></div>"}).join("");html+=custom.map(function(a){var left=dD(t0(),pD(a.date));return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--ac)"><b>'+esc(a.title)+'</b><span style="color:var(--mu)">'+esc(a.date)+" · "+(left>=0?left+" 天后":"已 "+Math.abs(left)+" 天")+' <button class="gh" onclick="annivDelete(\''+a.id+'\')">删除</button></span></div>'}).join("");$("impList").innerHTML=html}
 /* ================= 相册 ================= */
 var photoCat="all";
 function photosAll(){return (ls("love_photos_v1")||[])}
@@ -625,7 +634,7 @@ function openPhoto(i){
 function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src=""; }
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function resetPhotos(){localStorage.removeItem("love_photos_v1");renPhotos();toast("已清空")}
-function bindPhotoInput(){$("photoInput").addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){var r=new FileReader();r.onload=function(ev){var im=new Image();im.onload=function(){var mx=800,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var a=ls("love_photos_v1")||[];a.push({src:c.toDataURL("image/jpeg",.8),caption:"📷 新回忆",cat:"日常"});lws("love_photos_v1",a);renPhotos();toast("已加入 💾")};im.src=ev.target.result};r.readAsDataURL(f)});e.target.value=""})}
+function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;var done=0;files.forEach(function(f){if(!/^image\//.test(f.type)){toast("只能选择图片");return}var r=new FileReader();r.onerror=function(){toast("照片读取失败")};r.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=560,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.62);var a=ls("love_photos_v1")||[];a.push({id:uid(),src:src,caption:"📷 新回忆",cat:"日常"});lws("love_photos_v1",a);var check=ls("love_photos_v1")||[];if(!check.length||check[check.length-1].src!==src)throw new Error("storage");done++;renPhotos();toast("已加入相册 💾")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r.readAsDataURL(f)});e.target.value=""})}
 /* ================= 我们 ================= */
 function openUsTab(n,el){if(el)document.querySelectorAll("[data-us]").forEach(function(x){x.classList.toggle("on",x===el)});["tags","tl","future","edit"].forEach(function(x){var e=$("us-"+x);if(e)e.classList.toggle("on",x===n)});if(n==="edit")fillUsEdit()}
 function renUs(){$("meTags").innerHTML=CONFIG.me.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("herTags").innerHTML=CONFIG.her.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("futureList").innerHTML=CONFIG.future.map(function(f){return '<div style="background:var(--c2);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--sh)"><div style="font-size:24px">'+f.icon+'</div><h4 style="font-size:14px;color:var(--p);margin:6px 0 4px">'+esc(f.title)+'</h4><p style="font-size:11px;color:var(--mu);line-height:1.6">'+esc(f.text)+"</p></div>"}).join("");renTl()}
@@ -735,7 +744,7 @@ function mqRaw(o){
   if(!syncOn||!syncCli) return;
   try{ syncCli.publish(ROOM,JSON.stringify(o)) }catch(err){}
 }
-var SYNC_KEYS={love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
+var SYNC_KEYS={love_anniversaries_v1:1,love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
 function pushOne(k,it){
   if(!it||!it.id) return 0;
   var lo=ls(k); if(!Array.isArray(lo)) lo=[];
@@ -771,7 +780,7 @@ function handleMqMsg(topic,msg){
     var u=JSON.parse(msg);
     if(!u||!u.k) return;
     if(u.k==="__req"){ mkSnap(); return }
-    if(u.k==="__poke"){ buzz(220); heartPop(); toast(((u.v&&u.v.from)||"TA")+" 戳了你一下 💗"); if(CUR==="home")renToday(); return }
+    if(u.k==="__poke"){ if(u.v&&u.v.sender===clientId)return; buzz(220); heartPop(); toast(((u.v&&u.v.from)||"TA")+" 戳了你一下 💗"); if(CUR==="home")renToday(); return }
     if(u.k==="__hug"){ buzz(60); showHug(); toast(((u.v&&u.v.from)||"TA")+" 抱住了你 🫂"); return }
     if(u.k==="__rain"){ buzz(80); heartRain(); toast(((u.v&&u.v.from)||"TA")+" 送了你一场爱心雨 ❤️"); return }
     if(u.k==="game"){ handleGame(u.v); return }
@@ -986,13 +995,16 @@ window.__back=function(){
   try{
     var g=document.querySelector(".gwin.on");
     if(g){ closeGame(); return "1" }
+    var pv=document.getElementById("photoView");if(pv&&pv.classList.contains("on")){closePhoto();return "1"}
+    var af=document.getElementById("annivForm");if(af&&af.style.display!=="none"){annivCancel();return "1"}
     var vp=document.getElementById("verPop");
     if(vp){ vp.remove(); return "1" }
     var tl=document.getElementById("tlEdit");
     if(tl&&tl.classList.contains("on")){ tlClose(); return "1" }
-    if(CUR!=="home"){ nav("home",true); return "1" }
-  }catch(e){}
-  return "1";
+    if(routeStack.length>1){routeStack.pop();var prev=routeStack[routeStack.length-1]||"home";nav(prev,true);return "1"}
+    if(CUR!=="home"){nav("home",true);return "1"}
+    return "0";
+  }catch(e){return "0"}
 };
 document.addEventListener("DOMContentLoaded",init);
 </script>
