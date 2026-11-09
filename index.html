@@ -176,7 +176,8 @@ to{opacity:1;transform:translate(-50%,0)}}
 #photoView.on{display:flex}
 #photoView img,#photoView video{position:absolute;top:0;left:0;width:100%;height:100%;max-width:none!important;max-height:none!important;margin:0;padding:0;border-radius:0!important;object-fit:contain;background:#080708;touch-action:pan-y;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;}
 #photoView .pv-cap{display:none!important}
-#photoView .pv-close{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:4;width:44px;height:44px;border-radius:50%;background:rgba(30,30,30,.58);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+#photoView .pv-close{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:5;width:44px;height:44px;border:0;border-radius:50%;background:rgba(30,30,30,.68);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+#photoView .pv-save{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:5;border:0;border-radius:24px;background:rgba(30,30,30,.8);color:#fff;padding:12px 22px;font-size:15px;min-height:46px}
 @media (max-width:600px){#photoView{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh}#photoView img,#photoView video{object-fit:contain}#photoView .pv-close{width:46px;height:46px}}
 .ach2{background:var(--c2);border-radius:18px;padding:14px;box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start}
 .ach2.lock{opacity:.48}
@@ -342,7 +343,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-9";
+var APP_VER="2026-11-10-10";
 function checkUpdate(){
   fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("version");return r.text()}).then(function(v){
     v=(v||"").trim();if(!v||v===APP_VER)return;
@@ -663,8 +664,9 @@ function showPhotoAt(i){if(!photoView.length)return;photoViewIndex=(i+photoView.
   im.style.display=isVideo?"none":"block";vid.style.display=isVideo?"block":"none";
   if(isVideo){vid.src=p.src;vid.play().catch(function(){})}else{vid.pause();vid.removeAttribute("src");vid.load();im.src=p.src}
   $("pvCap").textContent="";
-  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-"+(p.kind==="video"?"live-":"photo-")+(p.id||Date.now())+(p.kind==="video"?".mp4":(p.mime==="image/png"?".png":p.mime==="image/webp"?".webp":".jpg"))}
+  var save=$("pvSave");if(save){save.textContent=isVideo?"⬇ 保存视频":"⬇ 保存图片";save.dataset.url=p.src;save.dataset.name="baiyu-"+(isVideo?"live-":"photo-")+(p.id||Date.now())+(isVideo?".mp4":(p.mime==="image/png"?".png":p.mime==="image/webp"?".webp":".jpg"))}
 }
+function downloadCurrentPhoto(){var b=$("pvSave");if(!b)return;var url=b.dataset.url,name=b.dataset.name;if(!url)return;try{var a=document.createElement("a");a.href=url;a.download=name||"baiyu-photo";a.style.display="none";document.body.appendChild(a);a.click();a.remove();toast("已开始保存")}catch(e){window.open(url,"_blank");toast("请在打开的图片上使用浏览器菜单保存")}}
 function closePhoto(){ $("photoView").classList.remove("on");document.body.style.overflow="";$("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
 function photoSwipeStart(e){var t=e.touches&&e.touches[0];if(!t)return;photoTouchX=t.clientX;photoTouchY=t.clientY}
 function photoSwipeEnd(e){var t=e.changedTouches&&e.changedTouches[0];if(!t)return;var dx=t.clientX-photoTouchX,dy=t.clientY-photoTouchY;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)showPhotoAt(photoViewIndex+(dx<0?1:-1))}
@@ -1055,5 +1057,5 @@ document.addEventListener("DOMContentLoaded",function(){init();var pv=$("photoVi
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
-<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt="" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"><video id="pvVideo" muted loop autoplay playsinline controls style="display:none" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"></video></div>
+<div id="photoView" onclick="if(event.target===this)closePhoto()"><button type="button" class="pv-close" onclick="event.stopPropagation();closePhoto()">✕</button><img id="pvImg" alt="" onclick="event.stopPropagation()" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"><video id="pvVideo" muted loop autoplay playsinline controls style="display:none" onclick="event.stopPropagation()" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"></video><button id="pvSave" type="button" class="pv-save" onclick="event.stopPropagation();downloadCurrentPhoto()">⬇ 保存图片</button></div>
 </body></html>
