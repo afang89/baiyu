@@ -252,7 +252,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>function hideSplash(){var s=document.getElementById("splash");if(!s)return;s.style.opacity="0";setTimeout(function(){try{s.remove()}catch(e){}},350)}setTimeout(hideSplash,1500)</script>
 <div class="lock" id="lock"><div class="bx"><div class="av">🌿</div><h2>白榆</h2><p style="font-size:12px;color:var(--mu);margin:4px 0 16px">方方 & 欣欣的小家</p><input class="inp" id="lockIn" type="password" placeholder="暗号" autocomplete="off" style="text-align:center"><button class="btn" style="width:100%;margin-top:12px" onclick="unlock()">🔓 进入</button></div></div>
 <audio id="bgm" loop></audio><button class="mubtn" id="muBtn" onclick="toggleMusic()">🎵</button><div class="toast" id="toast"></div>
-<input type="file" id="photoInput" accept="image/*" multiple style="display:none">
+<input type="file" id="photoInput" accept="image/*,video/mp4,video/quicktime,video/webm" multiple style="display:none">
 <div id="app">
 <div class="topbar"><h2>🌿 白榆</h2><div class="acts"><span class="sync-dot" id="syncDot"></span><select class="theme-sel" id="themeSel" onchange="setTheme(this.value)"><option value="pink">🌸</option><option value="blue">🌊</option><option value="green">🍃</option><option value="dark">🌙</option><option value="morandi">🍂</option></select><button class="top-ic" onclick="nav('photos')">📸</button></div></div>
 
@@ -341,7 +341,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-3";
+var APP_VER="2026-11-10-4";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -644,21 +644,24 @@ function renPhotos(){
     return;
   }
   g.innerHTML=list.map(function(p,i){
-    return '<div class="pcell" onclick="openPhoto('+i+')">'+
-      (p.src?'<img src="'+p.src+'" loading="lazy">':'<span>'+esc(p.emoji||"📷")+'</span>')+
-      '<span style="position:absolute;bottom:6px;left:0;right:0;font-size:10px;color:#fff;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.5)">'+esc(p.caption||"")+'</span></div>'}).join("");
+    var media=p.kind==="video"?'<video src="'+p.src+'" muted loop autoplay playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>':'<img src="'+p.src+'" loading="lazy">';
+    return '<div class="pcell" onclick="openPhoto('+i+')">'+media+
+      (p.caption?'<span style="position:absolute;bottom:6px;left:0;right:0;font-size:10px;color:#fff;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.5)">'+esc(p.caption)+'</span>':'')+
+      (p.kind==="video"?'<span style="position:absolute;top:6px;right:6px;font-size:11px">▶</span>':'')+'</div>'}).join("");
 }
 function openPhoto(i){
   var p=photoView[i];if(!p||!p.src)return;
-  $("pvImg").src=p.src;
+  var im=$("pvImg"),vid=$("pvVideo"),isVideo=p.kind==="video";
+  im.style.display=isVideo?"none":"block";vid.style.display=isVideo?"block":"none";
+  if(isVideo){vid.src=p.src;vid.play().catch(function(){})}else im.src=p.src;
   $("pvCap").textContent=p.caption||"";
-  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-photo-"+(p.id||Date.now())+".jpg"}
+  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-"+(p.kind==="video"?"live-":"photo-")+(p.id||Date.now())+(p.kind==="video"?".mp4":".jpg")}
   $("photoView").classList.add("on");
 }
-function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src=""; }
+function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
-function resetPhotos(){localStorage.removeItem("love_photos_v1");renPhotos();toast("已清空")}
-function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;var done=0;files.forEach(function(f){if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("只能选择图片");return}var r=new FileReader();r.onerror=function(){toast("照片读取失败")};r.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=420,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.45);var a=ls("love_photos_v1")||[];var item={id:uid(),src:src,caption:"📷 新回忆",cat:"日常"};a.push(item);try{localStorage.setItem("love_photos_v1",JSON.stringify(a))}catch(storageError){throw new Error("storage")}var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].src!==src)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});done++;renPhotos();toast("已加入相册 💾")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r.readAsDataURL(f)});e.target.value=""})}
+function storePhoto(item){var a=ls("love_photos_v1")||[];a.push(item);localStorage.setItem("love_photos_v1",JSON.stringify(a));var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].id!==item.id)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});renPhotos()}
+function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=420,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.45);storePhoto({id:uid(),src:src,kind:"image",caption:"",cat:"日常"});toast("已加入相册")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r2.readAsDataURL(f)});e.target.value=""})}
 /* ================= 我们 ================= */
 function openUsTab(n,el){if(el)document.querySelectorAll("[data-us]").forEach(function(x){x.classList.toggle("on",x===el)});["tags","tl","future","edit"].forEach(function(x){var e=$("us-"+x);if(e)e.classList.toggle("on",x===n)});if(n==="edit")fillUsEdit()}
 function renUs(){$("meTags").innerHTML=CONFIG.me.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("herTags").innerHTML=CONFIG.her.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("futureList").innerHTML=CONFIG.future.map(function(f){return '<div style="background:var(--c2);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--sh)"><div style="font-size:24px">'+f.icon+'</div><h4 style="font-size:14px;color:var(--p);margin:6px 0 4px">'+esc(f.title)+'</h4><p style="font-size:11px;color:var(--mu);line-height:1.6">'+esc(f.text)+"</p></div>"}).join("");renTl()}
@@ -1041,5 +1044,5 @@ document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
-<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="event.stopPropagation()">⬇ 下载图片</a></div>
+<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><video id="pvVideo" muted loop autoplay playsinline controls style="display:none;max-width:94vw;max-height:78vh;border-radius:14px"></video><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="event.stopPropagation()">⬇ 下载图片</a></div>
 </body></html>
