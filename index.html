@@ -174,9 +174,10 @@ to{opacity:1;transform:translate(-50%,0)}}
 @keyframes spLoad{to{width:100%}}
 #photoView{position:fixed;inset:0;z-index:880;background:rgba(12,8,10,.96);display:none;align-items:center;justify-content:center;flex-direction:column}
 #photoView.on{display:flex}
-#photoView img{max-width:94vw;max-height:78vh;border-radius:14px;object-fit:contain}
-#photoView .pv-cap{color:#ffd9e2;font-size:13px;margin-top:14px}
-#photoView .pv-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center}
+#photoView img,#photoView video{position:absolute;inset:0;width:100vw;height:100dvh;max-width:none!important;max-height:none!important;border-radius:0!important;object-fit:contain;background:#080708}
+#photoView .pv-cap{position:absolute;left:16px;right:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));color:#ffd9e2;font-size:13px;text-align:center;pointer-events:none}
+#photoView .pv-close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;z-index:3;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+#photoView .pv-download-hint{position:absolute;left:50%;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:3;transform:translateX(-50%);white-space:nowrap;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.24);border-radius:20px;padding:9px 15px;font-size:13px;touch-action:none;user-select:none;-webkit-user-select:none}
 .ach2{background:var(--c2);border-radius:18px;padding:14px;box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start}
 .ach2.lock{opacity:.48}
 .ach2 .ai{font-size:30px;line-height:1}
@@ -274,7 +275,7 @@ body.locking{overflow:hidden;height:100dvh}
 <section class="view" id="v-days"><div class="topbar" style="position:static"><h2>💝 纪念日</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="card"><div class="hd"><h3>倒计时</h3></div><div id="daysGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div></div><div class="card"><div class="hd"><h3>🎯 里程碑</h3></div><div id="mileText" style="font-size:13px;color:var(--mu)"></div><div style="height:10px;border-radius:99px;background:var(--ac);overflow:hidden;margin:8px 0"><div id="mileBar" style="height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--p2),var(--p));transition:width .5s"></div></div><div id="mileNum" style="text-align:right;font-size:12px;color:var(--mu)"></div></div><div class="card"><div class="hd"><h3>🗓 重要日子</h3><button class="gh" onclick="annivNew()">＋ 添加</button></div><div id="annivForm" style="display:none;margin:8px 0"><input class="inp" id="annivTitle" placeholder="纪念日名称"><input class="inp" id="annivDate" type="date" style="margin-top:8px"><div class="row" style="margin-top:8px"><button class="btn" onclick="annivSave()">保存</button><button class="gh" onclick="annivCancel()">取消</button></div></div><div id="impList"></div></div></div></section>
 
 <!-- 相册 -->
-<section class="view" id="v-photos"><div class="topbar" style="position:static"><h2>📸 相册</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs" id="photoFilters"><span class="tb on" data-cat="all">全部</span><span class="tb" data-cat="合照">合照</span><span class="tb" data-cat="单人">单人</span><span class="tb" data-cat="旅行">旅行</span><span class="tb" data-cat="日常">日常</span></div><div class="pgrid" id="photoGrid"></div><div style="text-align:center;margin-top:10px"><button class="gh" onclick="resetPhotos()">清空相册</button></div></div></section>
+<section class="view" id="v-photos"><div class="topbar" style="position:static"><h2>📸 相册</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs" id="photoFilters"><span class="tb on" data-cat="all">全部</span><span class="tb" data-cat="合照">合照</span><span class="tb" data-cat="单人">单人</span><span class="tb" data-cat="旅行">旅行</span><span class="tb" data-cat="日常">日常</span></div><div class="pgrid" id="photoGrid"></div></div></section>
 
 <!-- 我们 -->
 <section class="view" id="v-us"><div class="topbar" style="position:static"><h2>💕 我们</h2><div class="acts"><button class="top-ic" onclick="nav('home')">✕</button></div></div><div class="pg"><div class="tabs"><span class="tb on" data-us="tags">性格</span><span class="tb" data-us="tl">时间轴</span><span class="tb" data-us="future">未来</span></div><div class="pan on" id="us-tags"><div class="card"><div class="hd"><h3>🦁 方方</h3></div><div id="meTags"></div></div><div class="card"><div class="hd"><h3>🐰 欣欣</h3></div><div id="herTags"></div></div></div><div class="pan" id="us-tl"><div id="tlList"></div><button class="btn" style="width:100%;margin-top:4px" onclick="tlNew()">＋ 添加新节点</button></div><div class="pan" id="us-future"><div class="pgrid" id="futureList"></div></div></div></section>
@@ -341,7 +342,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-5";
+var APP_VER="2026-11-10-6";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -450,10 +451,7 @@ function uploadAvatar(who){
       r.onload=function(ev){
         var im=new Image();
         im.onload=function(){
-          var c=document.createElement("canvas"), mx=200, sc=Math.min(1,mx/Math.max(im.width,im.height));
-          c.width=Math.round(im.width*sc); c.height=Math.round(im.height*sc);
-          c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-          var d=c.toDataURL("image/jpeg",0.85);
+          var d=ev.target.result;
           if(who==="her"){ US.herImg=d; CONFIG.her.img=d } else { US.meImg=d; CONFIG.me.img=d }
           svUS(); mqRaw({k:"love_avatar_v1",v:{id:uid(),who:who,img:d},t:"one"}); renHome(); fillUsEdit(); renUs(); toast("头像换好啦 ✨"); inp.remove();
         };
@@ -649,20 +647,24 @@ function renPhotos(){
       (p.caption?'<span style="position:absolute;bottom:6px;left:0;right:0;font-size:10px;color:#fff;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.5)">'+esc(p.caption)+'</span>':'')+
       (p.kind==="video"?'<span style="position:absolute;top:6px;right:6px;font-size:11px">▶</span>':'')+'</div>'}).join("");
 }
-function openPhoto(i){
-  var p=photoView[i];if(!p||!p.src)return;
+var photoViewIndex=0,photoTouchX=0;
+function openPhoto(i){showPhotoAt(i);var v=$("photoView");v.classList.add("on")}
+function showPhotoAt(i){if(!photoView.length)return;photoViewIndex=(i+photoView.length)%photoView.length;var p=photoView[photoViewIndex];if(!p||!p.src)return;
   var im=$("pvImg"),vid=$("pvVideo"),isVideo=p.kind==="video";
   im.style.display=isVideo?"none":"block";vid.style.display=isVideo?"block":"none";
-  if(isVideo){vid.src=p.src;vid.play().catch(function(){})}else im.src=p.src;
+  if(isVideo){vid.src=p.src;vid.play().catch(function(){})}else{vid.pause();vid.removeAttribute("src");vid.load();im.src=p.src}
   $("pvCap").textContent=p.caption||"";
-  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-"+(p.kind==="video"?"live-":"photo-")+(p.id||Date.now())+(p.kind==="video"?".mp4":".jpg")}
-  $("photoView").classList.add("on");
+  var dl=$("pvDownload");if(dl){dl.href=p.src;dl.download="baiyu-"+(p.kind==="video"?"live-":"photo-")+(p.id||Date.now())+(p.kind==="video"?".mp4":(p.mime==="image/png"?".png":p.mime==="image/webp"?".webp":".jpg"))}
 }
 function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
-function downloadPhoto(e){if(e)e.stopPropagation();var a=$("pvDownload");if(!a)return;var url=a.href,name=a.download||"baiyu-photo.jpg";try{var link=document.createElement("a");link.href=url;link.download=name;link.style.display="none";document.body.appendChild(link);link.click();link.remove();toast("已开始下载")}catch(err){window.open(url,"_blank");toast("请在打开的媒体上长按保存")}}
+function photoSwipeStart(e){photoTouchX=(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:0)}
+function photoSwipeEnd(e){var x=e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientX:photoTouchX,dx=x-photoTouchX;if(Math.abs(dx)>50)showPhotoAt(photoViewIndex+(dx<0?1:-1))}
+function downloadPhotoStart(e){e.preventDefault();e.stopPropagation();var el=$("pvDownload");if(el){el.dataset.longpressed="0";el._longPressTimer=setTimeout(function(){el.dataset.longpressed="1";toast("请长按媒体画面保存图片或视频")},550)}}
+function downloadPhotoEnd(e){if(e){e.preventDefault();e.stopPropagation()}var el=$("pvDownload");if(el&&el._longPressTimer)clearTimeout(el._longPressTimer);if(el&&el.dataset.longpressed==="1"){el.dataset.longpressed="0";return}toast("请长按图片或视频画面，然后选择保存")}
+function downloadPhotoCancel(e){if(e)e.stopPropagation();var el=$("pvDownload");if(el&&el._longPressTimer)clearTimeout(el._longPressTimer)}
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function storePhoto(item){var a=ls("love_photos_v1")||[];a.push(item);localStorage.setItem("love_photos_v1",JSON.stringify(a));var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].id!==item.id)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});renPhotos()}
-function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=420,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.45);storePhoto({id:uid(),src:src,kind:"image",caption:"",cat:"日常"});toast("已加入相册")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r2.readAsDataURL(f)});e.target.value=""})}
+function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){try{storePhoto({id:uid(),src:ev.target.result,kind:"image",caption:"",cat:"日常",mime:f.type});toast("已加入相册")}catch(err){toast("原图超过本机存储空间，请换一张较小文件") }};r2.readAsDataURL(f)});e.target.value=""})}
 /* ================= 我们 ================= */
 function openUsTab(n,el){if(el)document.querySelectorAll("[data-us]").forEach(function(x){x.classList.toggle("on",x===el)});["tags","tl","future","edit"].forEach(function(x){var e=$("us-"+x);if(e)e.classList.toggle("on",x===n)});if(n==="edit")fillUsEdit()}
 function renUs(){$("meTags").innerHTML=CONFIG.me.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("herTags").innerHTML=CONFIG.her.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("futureList").innerHTML=CONFIG.future.map(function(f){return '<div style="background:var(--c2);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--sh)"><div style="font-size:24px">'+f.icon+'</div><h4 style="font-size:14px;color:var(--p);margin:6px 0 4px">'+esc(f.title)+'</h4><p style="font-size:11px;color:var(--mu);line-height:1.6">'+esc(f.text)+"</p></div>"}).join("");renTl()}
@@ -1047,5 +1049,5 @@ document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
-<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><video id="pvVideo" muted loop autoplay playsinline controls style="display:none;max-width:94vw;max-height:78vh;border-radius:14px"></video><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="downloadPhoto(event)">⬇ 下载图片</a></div>
+<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt="" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"><video id="pvVideo" muted loop autoplay playsinline controls style="display:none" ontouchstart="photoSwipeStart(event)" ontouchend="photoSwipeEnd(event)"></video><div class="pv-cap" id="pvCap"></div><button id="pvDownload" class="pv-download-hint" oncontextmenu="downloadPhotoEnd(event)" onpointerdown="downloadPhotoStart(event)" onpointerup="downloadPhotoEnd(event)" onpointercancel="downloadPhotoCancel(event)" onpointerleave="downloadPhotoCancel(event)">长按图片保存</button></div>
 </body></html>
