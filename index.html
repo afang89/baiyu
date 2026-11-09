@@ -213,6 +213,29 @@ body.inapp .mubtn{display:none}
 html,body{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 body.locking{overflow:hidden;height:100dvh}
+
+@media (min-width:700px){
+  body{padding:0 24px}
+  #app{max-width:1120px;margin:0 auto;padding-bottom:108px}
+  .view{max-width:1120px;margin:0 auto}
+  .topbar{border-radius:0 0 18px 18px;padding-left:28px;padding-right:28px}
+  .hero{margin:18px 0 20px;padding:34px 28px 26px}
+  .hero h1{font-size:32px}
+  .pg{padding:0 0}
+  .view>.pg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+  .view>.pg>.card{margin-bottom:0}
+  .view>.pg>.tabs,.view>.pg>.card:first-child,.view>.pg>.pgrid,.view>.pg>.pro-card{grid-column:1/-1}
+  .pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .gicon-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bnav{max-width:720px;width:auto;min-width:560px}
+  .bnav a{font-size:12px;padding-left:18px;padding-right:18px}
+  .bnav a .ic{font-size:22px}
+}
+@media (min-width:1100px){
+  #app{max-width:1280px}
+  .view>.pg{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .view>.pg>.tabs,.view>.pg>.card:first-child,.view>.pg>.pgrid,.view>.pg>.pro-card{grid-column:1/-1}
+}
 </style><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="白榆"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="data:image/png;base64,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">
 </head>
 <body data-theme="pink">
@@ -318,7 +341,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-1";
+var APP_VER="2026-11-10-2";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -634,7 +657,7 @@ function openPhoto(i){
 function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src=""; }
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function resetPhotos(){localStorage.removeItem("love_photos_v1");renPhotos();toast("已清空")}
-function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;var done=0;files.forEach(function(f){if(!/^image\//.test(f.type)){toast("只能选择图片");return}var r=new FileReader();r.onerror=function(){toast("照片读取失败")};r.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=560,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.62);var a=ls("love_photos_v1")||[];a.push({id:uid(),src:src,caption:"📷 新回忆",cat:"日常"});lws("love_photos_v1",a);var check=ls("love_photos_v1")||[];if(!check.length||check[check.length-1].src!==src)throw new Error("storage");done++;renPhotos();toast("已加入相册 💾")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r.readAsDataURL(f)});e.target.value=""})}
+function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;var done=0;files.forEach(function(f){if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("只能选择图片");return}var r=new FileReader();r.onerror=function(){toast("照片读取失败")};r.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=420,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.45);var a=ls("love_photos_v1")||[];var item={id:uid(),src:src,caption:"📷 新回忆",cat:"日常"};a.push(item);try{localStorage.setItem("love_photos_v1",JSON.stringify(a))}catch(storageError){throw new Error("storage")}var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].src!==src)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});done++;renPhotos();toast("已加入相册 💾")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r.readAsDataURL(f)});e.target.value=""})}
 /* ================= 我们 ================= */
 function openUsTab(n,el){if(el)document.querySelectorAll("[data-us]").forEach(function(x){x.classList.toggle("on",x===el)});["tags","tl","future","edit"].forEach(function(x){var e=$("us-"+x);if(e)e.classList.toggle("on",x===n)});if(n==="edit")fillUsEdit()}
 function renUs(){$("meTags").innerHTML=CONFIG.me.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("herTags").innerHTML=CONFIG.her.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("futureList").innerHTML=CONFIG.future.map(function(f){return '<div style="background:var(--c2);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--sh)"><div style="font-size:24px">'+f.icon+'</div><h4 style="font-size:14px;color:var(--p);margin:6px 0 4px">'+esc(f.title)+'</h4><p style="font-size:11px;color:var(--mu);line-height:1.6">'+esc(f.text)+"</p></div>"}).join("");renTl()}
@@ -744,7 +767,7 @@ function mqRaw(o){
   if(!syncOn||!syncCli) return;
   try{ syncCli.publish(ROOM,JSON.stringify(o)) }catch(err){}
 }
-var SYNC_KEYS={love_anniversaries_v1:1,love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
+var SYNC_KEYS={love_photos_v1:1,love_anniversaries_v1:1,love_messages_v1:1,love_emotions_v1:1,love_wishes_v1:1,love_letters_v1:1,love_chats_v1:1,love_footprints_v1:1,love_daily_v1:1,love_checkin_v1:1,love_spin_v1:1};
 function pushOne(k,it){
   if(!it||!it.id) return 0;
   var lo=ls(k); if(!Array.isArray(lo)) lo=[];
@@ -790,6 +813,7 @@ function handleMqMsg(topic,msg){
       if(CUR==="emotions")renEmo();
       else if(CUR==="wishes")renWish();
       else if(CUR==="mail")renMail();
+      else if(CUR==="photos")renPhotos();
       else if(CUR==="play")renPlay();
       else if(CUR==="home"){renHome()}
       if(CUR!=="home") toast("收到 TA 的更新 💕");
@@ -847,7 +871,7 @@ function closeGame(){GWINS.forEach(function(g){var el=$("gw-"+g);if(el)el.classL
 function renGames(){ttDraw();rpsDraw();goDraw();xqDraw();tapDraw();memDraw();setGameStatus()}
 function myDev(){try{var d=sessionStorage.getItem("baiyu_dev");if(d)return d;d=Date.now().toString(36)+Math.random().toString(36).slice(2,6);sessionStorage.setItem("baiyu_dev",d);return d}catch(e){return "x"}}
 /* ================= 备份 & 链接同步 ================= */
-var ALL_KEYS=["love_messages_v1","love_emotions_v1","love_wishes_v1","love_letters_v1","love_chats_v1","love_photos_v1","love_footprints_v1","love_daily_v1","love_checkin_v1","love_spin_v1",SK];
+var ALL_KEYS=["love_photos_v1","love_messages_v1","love_emotions_v1","love_wishes_v1","love_letters_v1","love_chats_v1","love_photos_v1","love_footprints_v1","love_daily_v1","love_checkin_v1","love_spin_v1",SK];
 function snapshot(){var d={site:"白榆",t:new Date().toISOString(),d:{}};ALL_KEYS.forEach(function(k){var v=ls(k);if(v!=null)d.d[k]=v});return d}
 function exportBackup(){US.backedUp=1;svUS();var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(snapshot(),null,2)],{type:"application/json"}));a.download="baiyu-"+ts()+".json";a.click();toast("已导出 📦")}
 function importBackup(){var i=document.createElement("input");i.type="file";i.accept=".json,application/json";i.onchange=function(){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(!d||!d.d)throw 0;var ks=Object.keys(d.d),c=0;ks.forEach(function(k){var inV=d.d[k];if(inV==null)return;if(k===SK){var cur=ls(SK)||{};for(var kk in inV){if(inV[kk]!=null&&cur[kk]==null)cur[kk]=inV[kk]}lws(SK,cur);return}var lo=ls(k);if(k==="love_daily_v1"||k==="love_checkin_v1"||k==="love_spin_v1"){if(!lo)lo={};if(typeof inV==="object"&&!Array.isArray(inV)){for(var k2 in inV){if(inV[k2]&&!lo[k2]){lo[k2]=inV[k2];c++}}}}else if(Array.isArray(inV)){if(!lo)lo=[];var ids={};lo.forEach(function(x){if(x.id)ids[x.id]=true});inV.forEach(function(row){if(row&&row.id&&!ids[row.id]){lo.push(row);ids[row.id]=true;c++}else if(row&&!row.id){lo.push(row);c++}})}lws(k,lo)});US=ls(SK)||US;apS();renHome();if(CUR!=="home")nav(CUR);toast("已导入 "+c+" 条数据 💕")}catch(e){toast("文件格式不对")}};r.readAsText(f)};i.click()}
