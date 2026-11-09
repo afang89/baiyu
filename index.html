@@ -343,7 +343,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-10";
+var APP_VER="2026-11-10-11";
 function checkUpdate(){
   fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("version");return r.text()}).then(function(v){
     v=(v||"").trim();if(!v||v===APP_VER)return;
@@ -651,10 +651,9 @@ function renPhotos(){
     g.innerHTML='<div class="pcell" style="background:linear-gradient(135deg,#ffb6c1,#e75480);color:#fff" onclick="pickPhoto()"><span style="font-size:30px">＋</span><span style="font-size:12px">点这里上传照片</span></div>';
     return;
   }
-  g.innerHTML=list.map(function(p,i){
+  g.innerHTML='<div class="pcell" role="button" aria-label="上传照片" onclick="pickPhoto()"><span style="font-size:30px">＋</span><span style="font-size:12px">添加照片</span></div>'+list.map(function(p,i){
     var media=p.kind==="video"?'<video src="'+p.src+'" muted loop autoplay playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>':'<img src="'+p.src+'" loading="lazy">';
     return '<div class="pcell" onclick="openPhoto('+i+')">'+media+
-
       (p.kind==="video"?'<span style="position:absolute;top:6px;right:6px;font-size:11px">▶</span>':'')+'</div>'}).join("");
 }
 var photoViewIndex=0,photoTouchX=0,photoTouchY=0;
@@ -663,7 +662,6 @@ function showPhotoAt(i){if(!photoView.length)return;photoViewIndex=(i+photoView.
   var im=$("pvImg"),vid=$("pvVideo"),isVideo=p.kind==="video";
   im.style.display=isVideo?"none":"block";vid.style.display=isVideo?"block":"none";
   if(isVideo){vid.src=p.src;vid.play().catch(function(){})}else{vid.pause();vid.removeAttribute("src");vid.load();im.src=p.src}
-  $("pvCap").textContent="";
   var save=$("pvSave");if(save){save.textContent=isVideo?"⬇ 保存视频":"⬇ 保存图片";save.dataset.url=p.src;save.dataset.name="baiyu-"+(isVideo?"live-":"photo-")+(p.id||Date.now())+(isVideo?".mp4":(p.mime==="image/png"?".png":p.mime==="image/webp"?".webp":".jpg"))}
 }
 function downloadCurrentPhoto(){var b=$("pvSave");if(!b)return;var url=b.dataset.url,name=b.dataset.name;if(!url)return;try{var a=document.createElement("a");a.href=url;a.download=name||"baiyu-photo";a.style.display="none";document.body.appendChild(a);a.click();a.remove();toast("已开始保存")}catch(e){window.open(url,"_blank");toast("请在打开的图片上使用浏览器菜单保存")}}
