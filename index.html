@@ -341,7 +341,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-4";
+var APP_VER="2026-11-10-5";
 function checkUpdate(){
   try{
     fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(v){
@@ -659,6 +659,7 @@ function openPhoto(i){
   $("photoView").classList.add("on");
 }
 function closePhoto(){ $("photoView").classList.remove("on"); $("pvImg").src="";var v=$("pvVideo");v.pause();v.removeAttribute("src");v.load(); }
+function downloadPhoto(e){if(e)e.stopPropagation();var a=$("pvDownload");if(!a)return;var url=a.href,name=a.download||"baiyu-photo.jpg";try{var link=document.createElement("a");link.href=url;link.download=name;link.style.display="none";document.body.appendChild(link);link.click();link.remove();toast("已开始下载")}catch(err){window.open(url,"_blank");toast("请在打开的媒体上长按保存")}}
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function storePhoto(item){var a=ls("love_photos_v1")||[];a.push(item);localStorage.setItem("love_photos_v1",JSON.stringify(a));var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].id!==item.id)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});renPhotos()}
 function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){var im=new Image();im.onerror=function(){toast("图片无法解析")};im.onload=function(){try{var mx=420,sc=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*sc));c.height=Math.max(1,Math.round(im.height*sc));c.getContext("2d").drawImage(im,0,0,c.width,c.height);var src=c.toDataURL("image/jpeg",.45);storePhoto({id:uid(),src:src,kind:"image",caption:"",cat:"日常"});toast("已加入相册")}catch(err){toast("照片太大或存储空间不足，请换一张较小的照片")}};im.src=ev.target.result};r2.readAsDataURL(f)});e.target.value=""})}
@@ -814,9 +815,11 @@ function handleMqMsg(topic,msg){
     if(u.k==="__rain"){ buzz(80); heartRain(); toast(((u.v&&u.v.from)||"TA")+" 送了你一场爱心雨 ❤️"); return }
     if(u.k==="game"){ handleGame(u.v); return }
     if(u.k==="gomoku"||u.k==="xiangqi"){ hGameMsg(u); return }
-    if(u.k==="love_avatar_v1"&&u.v&&u.v.who&&u.v.img){
-      if(u.v.who==="her"){US.herImg=u.v.img;CONFIG.her.img=u.v.img}else{US.meImg=u.v.img;CONFIG.me.img=u.v.img}
-      svUS(); renHome(); if(CUR==="us"||CUR==="set"){renUs();fillUsEdit()} toast("收到 TA 的头像更新 💕"); return;
+    if(u.k==="love_avatar_v1"&&u.v&&u.v.who){
+      var isHer=u.v.who==="her",img=u.v.img||"",emoji=u.v.emoji||"";
+      if(isHer){US.herImg=img;CONFIG.her.img=img;if(emoji){US.herEmoji=emoji;CONFIG.her.emoji=emoji}}
+      else{US.meImg=img;CONFIG.me.img=img;if(emoji){US.meEmoji=emoji;CONFIG.me.emoji=emoji}}
+      svUS(); try{svConfig()}catch(x){}; renHome(); if(CUR==="us"||CUR==="set"){renUs();fillUsEdit()} toast("收到 TA 的头像更新 💕"); return;
     }
     var n=(u.t==="one")?pushOne(u.k,u.v):mergeIn(u.k,u.v);
     if(n){
@@ -982,8 +985,8 @@ function renHome(){
 }
 var AVEMO=["🦁","🐻","🐼","🦊","🐰","🐱","🐶","🦄","😎","🎧","⚽","🎮","🌸","🌟","🍀","🦋"];
 function pickAv(who,e){
-  if(who==="me"){CONFIG.me.emoji=e;US.meEmoji=e}else{CONFIG.her.emoji=e;US.herEmoji=e}
-  svUS(); try{svConfig()}catch(x){}; fillUsEdit(); renHome(); toast("头像换好啦 ✨");
+  if(who==="me"){CONFIG.me.emoji=e;US.meEmoji=e;US.meImg="";CONFIG.me.img=""}else{CONFIG.her.emoji=e;US.herEmoji=e;US.herImg="";CONFIG.her.img=""}
+  svUS(); try{svConfig()}catch(x){}; mqRaw({k:"love_avatar_v1",v:{id:uid(),who:who,img:"",emoji:e},t:"one"}); fillUsEdit(); renHome(); toast("头像换好啦 ✨");
 }
 function fillUsEdit(){
   try{
@@ -1044,5 +1047,5 @@ document.addEventListener("DOMContentLoaded",init);
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 
-<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><video id="pvVideo" muted loop autoplay playsinline controls style="display:none;max-width:94vw;max-height:78vh;border-radius:14px"></video><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="event.stopPropagation()">⬇ 下载图片</a></div>
+<div id="photoView" onclick="closePhoto()"><div class="pv-close">✕</div><img id="pvImg" alt=""><video id="pvVideo" muted loop autoplay playsinline controls style="display:none;max-width:94vw;max-height:78vh;border-radius:14px"></video><div class="pv-cap" id="pvCap"></div><a id="pvDownload" class="gh" download="baiyu-photo.jpg" style="margin-top:12px" onclick="downloadPhoto(event)">⬇ 下载图片</a></div>
 </body></html>
