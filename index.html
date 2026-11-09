@@ -343,7 +343,7 @@ body.locking{overflow:hidden;height:100dvh}
 <script>
 /* ================= 白榆 · 重写版 ================= */
 var SK="love_settings_v1";
-var APP_VER="2026-11-10-11";
+var APP_VER="2026-11-10-12";
 function checkUpdate(){
   fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("version");return r.text()}).then(function(v){
     v=(v||"").trim();if(!v||v===APP_VER)return;
@@ -670,7 +670,43 @@ function photoSwipeStart(e){var t=e.touches&&e.touches[0];if(!t)return;photoTouc
 function photoSwipeEnd(e){var t=e.changedTouches&&e.changedTouches[0];if(!t)return;var dx=t.clientX-photoTouchX,dy=t.clientY-photoTouchY;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)showPhotoAt(photoViewIndex+(dx<0?1:-1))}
 function pickPhoto(){ var i=$("photoInput"); if(i) i.click(); }
 function storePhoto(item){var a=ls("love_photos_v1")||[];a.push(item);localStorage.setItem("love_photos_v1",JSON.stringify(a));var check=JSON.parse(localStorage.getItem("love_photos_v1")||"[]");if(!check.length||check[check.length-1].id!==item.id)throw new Error("storage");mqRaw({k:"love_photos_v1",v:item,t:"one"});renPhotos()}
-function bindPhotoInput(){var input=$("photoInput");if(!input)return;input.addEventListener("change",function(e){var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;files.forEach(function(f){if(f.type.indexOf("video/")===0){if(f.size>300*1024){toast("实况视频请控制在300KB以内");return}var r=new FileReader();r.onerror=function(){toast("视频读取失败")};r.onload=function(ev){var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常"});toast("实况已加入相册")}catch(err){toast("存储空间不足，无法保存实况视频")}};probe.onerror=function(){toast("视频格式无法读取");probe.removeAttribute("src")};probe.src=ev.target.result};r.readAsDataURL(f);return}if(f.size>12*1024*1024){toast("照片超过12MB，请先压缩或换一张");return}if(!/^image\//.test(f.type)){toast("请选择图片或短视频");return}var r2=new FileReader();r2.onerror=function(){toast("照片读取失败")};r2.onload=function(ev){try{storePhoto({id:uid(),src:ev.target.result,kind:"image",caption:"",cat:"日常",mime:f.type});toast("已加入相册")}catch(err){toast("原图超过本机存储空间，请换一张较小文件") }};r2.readAsDataURL(f)});e.target.value=""})}
+function compressPhotoFallback(file,done){
+  var r=new FileReader();r.onerror=function(){done(null)};r.onload=function(ev){
+    var img=new Image();img.onerror=function(){done(null)};img.onload=function(){try{
+      var max=2048,scale=Math.min(1,max/Math.max(img.naturalWidth||img.width,img.naturalHeight||img.height));
+      var c=document.createElement("canvas");c.width=Math.max(1,Math.round((img.naturalWidth||img.width)*scale));c.height=Math.max(1,Math.round((img.naturalHeight||img.height)*scale));
+      c.getContext("2d").drawImage(img,0,0,c.width,c.height);done(c.toDataURL("image/jpeg",.9));
+    }catch(err){done(null)}};img.src=ev.target.result;
+  };r.readAsDataURL(file)
+}
+function bindPhotoInput(){
+  var input=$("photoInput");if(!input||input.dataset.bound)return;input.dataset.bound="1";
+  input.addEventListener("change",function(e){
+    var files=Array.prototype.slice.call(e.target.files||[]);if(!files.length)return;
+    files.forEach(function(f){
+      if(f.type.indexOf("video/")===0){
+        if(f.size>300*1024){toast("实况视频超过300KB，请选择较小视频");return}
+        var r=new FileReader();r.onerror=function(){toast("视频读取失败，请重新选择")};r.onload=function(ev){
+          var probe=document.createElement("video");probe.preload="metadata";probe.onloadedmetadata=function(){
+            if(!isFinite(probe.duration)||probe.duration>3.1){toast("实况视频请控制在3秒以内");return}
+            try{storePhoto({id:uid(),src:ev.target.result,kind:"video",caption:"",cat:"日常",mime:f.type});toast("实况已加入相册")}catch(err){toast("手机存储空间不足，视频未保存")}
+          };probe.onerror=function(){toast("手机无法读取此视频格式")};probe.src=ev.target.result
+        };r.readAsDataURL(f);return;
+      }
+      if(!/^image\//.test(f.type)){toast("请选择图片或支持的短视频");return}
+      if(f.size>12*1024*1024){toast("照片超过12MB，请选择较小文件");return}
+      var r2=new FileReader();r2.onerror=function(){toast("照片读取失败，请重新选择")};r2.onload=function(ev){
+        var raw={id:uid(),src:ev.target.result,kind:"image",caption:"",cat:"日常",mime:f.type};
+        try{storePhoto(raw);toast("原图已加入相册");return}catch(err){}
+        compressPhotoFallback(f,function(fallback){
+          if(!fallback){toast("手机存储空间不足，照片未保存");return}
+          try{raw.src=fallback;raw.mime="image/jpeg";raw.compressedForStorage=true;storePhoto(raw);toast("原图超出手机存储空间，已保存高质量兼容副本")}catch(err){toast("手机存储空间已满，请清理浏览器空间后重试")}
+        });
+      };r2.readAsDataURL(f)
+    });
+    e.target.value="";
+  })
+}
 /* ================= 我们 ================= */
 function openUsTab(n,el){if(el)document.querySelectorAll("[data-us]").forEach(function(x){x.classList.toggle("on",x===el)});["tags","tl","future","edit"].forEach(function(x){var e=$("us-"+x);if(e)e.classList.toggle("on",x===n)});if(n==="edit")fillUsEdit()}
 function renUs(){$("meTags").innerHTML=CONFIG.me.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("herTags").innerHTML=CONFIG.her.tags.map(function(t){return '<span class="chip">'+esc(t)+"</span>"}).join("");$("futureList").innerHTML=CONFIG.future.map(function(f){return '<div style="background:var(--c2);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--sh)"><div style="font-size:24px">'+f.icon+'</div><h4 style="font-size:14px;color:var(--p);margin:6px 0 4px">'+esc(f.title)+'</h4><p style="font-size:11px;color:var(--mu);line-height:1.6">'+esc(f.text)+"</p></div>"}).join("");renTl()}
